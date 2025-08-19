@@ -1,12 +1,12 @@
 // --- Cart logic ---
 let cart = [];
 
-// Load cart from localStorage
+// --- Load cart from localStorage ---
 function loadCartFromStorage() {
   cart = JSON.parse(localStorage.getItem('cart') || '[]');
 }
 
-// Save cart to localStorage
+// --- Save cart to localStorage ---
 function saveCartToStorage() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
@@ -29,7 +29,7 @@ function renderProductCard(prod) {
   `;
 }
 
-// Load products from JSON and render
+// --- Load products from JSON and render ---
 function renderProducts(containerId, limit = null) {
   fetch('products-data.json')
     .then(res => res.json())
@@ -61,7 +61,7 @@ function addToCart(productName) {
     });
 }
 
-// Show cart modal
+// --- Show cart modal ---
 function showCart() {
   loadCartFromStorage();
   let html = '<h5>Your Cart</h5>';
@@ -86,14 +86,14 @@ function showCart() {
   cartModal.show();
 }
 
-// Clear cart
+// --- Clear cart ---
 function clearCart() {
   cart = [];
   saveCartToStorage();
   showCart();
 }
 
-// Go to checkout page
+// --- Go to checkout page ---
 function goToCheckout() {
   saveCartToStorage();
   window.location.href = 'checkout.html';
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Render cart in checkout
+// --- Render cart in checkout ---
 function renderCheckoutCart() {
   const container = document.getElementById('cart-items');
   if (!container) return;
@@ -338,7 +338,7 @@ function renderCheckoutCart() {
   html += '</tbody></table>';
   container.innerHTML = html;
 
-  // Quantity change
+  // --- Quantity change ---
   document.querySelectorAll('.qty-input').forEach(input => {
     input.addEventListener('change', function() {
       const idx = this.getAttribute('data-idx');
@@ -351,7 +351,7 @@ function renderCheckoutCart() {
     });
   });
 
-  // Remove item
+  // --- Remove item ---
   document.querySelectorAll('.remove-item').forEach(btn => {
     btn.addEventListener('click', function() {
       const idx = this.getAttribute('data-idx');
@@ -363,7 +363,7 @@ function renderCheckoutCart() {
   });
 }
 
-// Update total in checkout
+// --- Update total in checkout ---
 function updateCheckoutTotal() {
   loadCartFromStorage();
   let total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
@@ -372,7 +372,7 @@ function updateCheckoutTotal() {
   document.getElementById('checkout-total').textContent = `Total: $${total.toFixed(2)}`;
 }
 
-//Products page search
+// --- Products page search ---
 function renderProductCard(prod) {
   return `
     <div class="col-md-6 col-lg-3 product" data-name="${prod.name}">
@@ -413,9 +413,17 @@ function filterProducts(category) {
     });
 }
 
-// Show all products on products.html load
+// --- Show all products on products.html load ---
 document.addEventListener('DOMContentLoaded', () => {
   if (window.location.pathname.endsWith('products.html')) {
     renderProducts('products');
   }
+});
+
+// --- Highlight active filter button ---
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
 });
