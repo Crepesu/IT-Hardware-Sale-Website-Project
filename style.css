@@ -124,3 +124,10 @@ h1, h2, h3, h4, h5, h6 {
 .text-muted {
   color: #b0c4d4 !important;
 }
+
+/* --- Filter button active state --- */
+.filter-btn.active {
+  background: #00f5ff33;
+  color: #00f5ff !important;
+  box-shadow: 0 0 8px #00f5ff44;
+}
