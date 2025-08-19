@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Alienware M16 Gaming Laptop",
+    "price": 2499.99,
+    "description": "High-performance gaming laptop with NVIDIA RTX 4080 graphics and Intel i9 processor.",
+    "image": "images/alienware-m16.jpg",
+    "category": "Laptops"
+  },
+  {
+    "name": "MacBook Pro 16 M2 Max",
+    "price": 3499.99,
+    "description": "Apple MacBook Pro with M2 Max chip, 32GB RAM, 1TB SSD, stunning Liquid Retina XDR display.",
+    "image": "images/macbook-pro-16.jpg",
+    "category": "Laptops"
+  },
+  {
+    "name": "Corsair K95 RGB Platinum Keyboard",
+    "price": 199.99,
+    "description": "Mechanical gaming keyboard with per-key RGB lighting and programmable macros.",
+    "image": "images/corsair-k95.jpg",
+    "category": "Peripherals"
+  },
+  {
+    "name": "Logitech G Pro X Superlight Mouse",
+    "price": 149.99,
+    "description": "Ultra-light wireless gaming mouse with HERO sensor for maximum precision.",
+    "image": "images/logitech-gpro-x.jpg",
+    "category": "Peripherals"
+  },
+  {
+    "name": "Intel Core i9-13900K",
+    "price": 589.99,
+    "description": "13th Gen Intel Core i9 processor with 24 cores and blazing-fast speeds.",
+    "image": "images/intel-i9-13900k.jpg",
+    "category": "Components"
+  },
+  {
+    "name": "NVIDIA GeForce RTX 4090",
+    "price": 1599.99,
+    "description": "The most powerful gaming GPU for 4K and ray tracing.",
+    "image": "images/nvidia-rtx-4090.jpg",
+    "category": "Components"
+  },
+  {
+    "name": "Razer BlackShark V2 Pro Headset",
+    "price": 179.99,
+    "description": "Wireless esports headset with THX Spatial Audio for immersive sound.",
+    "image": "images/razer-blackshark-v2-pro.jpg",
+    "category": "Accessories"
+  },
+  {
+    "name": "Elgato Stream Deck XL",
+    "price": 249.99,
+    "description": "Advanced stream control with 32 customizable LCD keys.",
+    "image": "images/elgato-stream-deck-xl.jpg",
+    "category": "Accessories"
+  }
+]
