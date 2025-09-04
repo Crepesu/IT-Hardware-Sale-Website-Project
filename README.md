@@ -1,6 +1,6 @@
 # TechOps — IT Hardware Sale Website
 
-A responsive, static demo storefront for selling computers, laptops, components and accessories. Built with plain HTML/CSS/JS and Bootstrap — intended as a small teaching/demo project (SIT120 / SIT223 style).
+A responsive, static demo storefront for selling computers, laptops, components and accessories. Built with plain HTML/CSS/JS and Bootstrap — intended as a demo project.
 
 This repository contains the TechOps front-end:
 - Index (home) with a featured deal and sidebar navigation
