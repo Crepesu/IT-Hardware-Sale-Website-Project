@@ -144,6 +144,6 @@ See `CHANGES.md` for the latest set of UI/UX and behavioral changes (updated 202
 
 - Bootstrap (CSS framework) — https://getbootstrap.com/
 - Bootstrap Icons — https://icons.getbootstrap.com/
-- This project currently does not include a LICENSE file. If you want to open-source this project, add a license (for example MIT) at the repo root as `LICENSE`.
+- This project currently does not include a LICENSE file.
 
 ---
