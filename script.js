@@ -150,15 +150,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (searchForm) {
     searchForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      const term = document.getElementById('searchInput').value.trim().toLowerCase();
-      fetch('products-data.json')
-        .then(res => res.json())
-        .then(products => {
-          const filtered = products.filter(p => p.name && p.name.toLowerCase().includes(term));
-          document.getElementById('featured-products').innerHTML = filtered.length
-            ? filtered.map(renderProductCard).join('')
-            : '<div class="col-12"><div class="alert alert-warning">No products found.</div></div>';
-        });
+      const term = document.getElementById('searchInput').value.trim();
+      // Always go to products page with query
+      const url = new URL(window.location.origin + '/products.html');
+      if (term) url.searchParams.set('q', term);
+      window.location.href = url.pathname + url.search;
     });
   }
 
@@ -187,24 +183,20 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCartFromStorage();
   
 
-  const searchForm = document.getElementById('searchForm');
-  if (searchForm) {
-    searchForm.addEventListener('submit', function(e) {
+  const searchForm2 = document.getElementById('searchForm');
+  if (searchForm2) {
+    searchForm2.addEventListener('submit', function(e) {
       e.preventDefault();
-      const term = document.getElementById('searchInput').value.trim().toLowerCase();
-      fetch('products-data.json')
-        .then(res => res.json())
-        .then(products => {
-          const filtered = products.filter(p => p.name && p.name.toLowerCase().includes(term));
-          document.getElementById('featured-products').innerHTML = filtered.length
-            ? filtered.map(renderProductCard).join('')
-            : '<div class="col-12"><div class="alert alert-warning">No products found.</div></div>';
-        });
+      const term = document.getElementById('searchInput').value.trim();
+      const url = new URL(window.location.origin + '/products.html');
+      if (term) url.searchParams.set('q', term);
+      window.location.href = url.pathname + url.search;
     });
   }
 });
 
 // --- Sidebar highlight ---
+// --- Sidebar highlight (scroll-based) ---
 document.addEventListener('scroll', () => {
   const sections = ['home', 'products', 'contact'];
   let found = false;
@@ -213,100 +205,363 @@ document.addEventListener('scroll', () => {
     const link = document.querySelector(`.sidebar-link[href="#${id}"]`);
     if (el && link) {
       const rect = el.getBoundingClientRect();
-      if (!found && rect.top < window.innerHeight / 2 && rect.bottom > 60) {
-        link.classList.add('active');
+      // Adjust the offset for when a section is considered active
+      const offset = window.innerHeight / 2; // Mid-screen
+      if (!found && rect.top <= offset && rect.bottom >= offset) {
+        // Only set active if it's not already the active one from a click
+        if (!link.classList.contains('active-from-click')) {
+          document.querySelectorAll('.sidebar-link').forEach(item => item.classList.remove('active'));
+          link.classList.add('active');
+        }
         found = true;
       } else {
         link.classList.remove('active');
+        link.classList.remove('active-from-click'); // Remove click-based active if scrolled away
       }
     }
   });
 });
 
-// --- Contact form validation ---
+// --- Contact form validation --- (updated for more robust checks, with real-time feedback)
 document.addEventListener('DOMContentLoaded', function() {
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
+    
+    // Create error message elements for each field
+    function createErrorMessages() {
+      const fields = ['name', 'email', 'phone', 'message'];
+      fields.forEach(fieldName => {
+        const field = contactForm[fieldName];
+        if (field && !field.parentNode.querySelector('.error-message')) {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'error-message text-danger small mt-1';
+          errorDiv.id = fieldName + '-error';
+          errorDiv.style.display = 'none';
+          field.parentNode.appendChild(errorDiv);
+        }
+      });
+    }
+    
+    // Initialize error message elements
+    createErrorMessages();
+    
+    // Validation functions for each field
+    function validateName(name) {
+      if (!name.trim()) {
+        return "Please enter your full name";
+      }
+      if (name.trim().length < 2) {
+        return "Name must be at least 2 characters long";
+      }
+      if (!/^[a-zA-Z\s'-]+$/.test(name)) {
+        return "Name can only contain letters, spaces, apostrophes, and hyphens";
+      }
+      return null;
+    }
+    
+    function validateEmail(email) {
+      if (!email.trim()) {
+        return "Please enter your email address";
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return "Please enter a valid email address (example@domain.com)";
+      }
+      return null;
+    }
+    
+    function validatePhone(phone) {
+      if (!phone.trim()) {
+        return "Please enter your phone number";
+      }
+      const cleanPhone = phone.replace(/\D/g, '');
+      if (cleanPhone.length < 7) {
+        return "Phone number must be at least 7 digits";
+      }
+      if (cleanPhone.length > 15) {
+        return "Phone number cannot exceed 15 digits";
+      }
+      if (!/^[\d\s\-\+\(\)]+$/.test(phone)) {
+        return "Phone number contains invalid characters";
+      }
+      return null;
+    }
+    
+    function validateMessage(message) {
+      if (!message.trim()) {
+        return "Please enter your message or inquiry";
+      }
+      if (message.trim().length < 10) {
+        return "Message must be at least 10 characters long";
+      }
+      if (message.trim().length > 1000) {
+        return "Message cannot exceed 1000 characters";
+      }
+      return null;
+    }
+    
+    // Show/hide error messages
+    function showError(fieldName, message) {
+      const errorElement = document.getElementById(fieldName + '-error');
+      const field = contactForm[fieldName];
+      if (errorElement && field) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        field.classList.add('is-invalid');
+        field.classList.remove('is-valid');
+      }
+    }
+    
+    function hideError(fieldName) {
+      const errorElement = document.getElementById(fieldName + '-error');
+      const field = contactForm[fieldName];
+      if (errorElement && field) {
+        errorElement.style.display = 'none';
+        field.classList.remove('is-invalid');
+        field.classList.add('is-valid');
+      }
+    }
+    
+    function clearAllErrors() {
+      ['name', 'email', 'phone', 'message'].forEach(fieldName => {
+        hideError(fieldName);
+        const field = contactForm[fieldName];
+        if (field) {
+          field.classList.remove('is-invalid', 'is-valid');
+        }
+      });
+    }
+    
+    // Real-time validation on input
+    contactForm.name.addEventListener('input', function() {
+      const error = validateName(this.value);
+      if (error) {
+        showError('name', error);
+      } else {
+        hideError('name');
+      }
+    });
+    
+    contactForm.email.addEventListener('input', function() {
+      const error = validateEmail(this.value);
+      if (error) {
+        showError('email', error);
+      } else {
+        hideError('email');
+      }
+    });
+    
+    contactForm.phone.addEventListener('input', function() {
+      const error = validatePhone(this.value);
+      if (error) {
+        showError('phone', error);
+      } else {
+        hideError('phone');
+      }
+    });
+    
+    contactForm.message.addEventListener('input', function() {
+      const error = validateMessage(this.value);
+      if (error) {
+        showError('message', error);
+      } else {
+        hideError('message');
+      }
+    });
+    
+    // Form submission validation
     contactForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      let valid = true;
-      let name = contactForm.name.value.trim();
-      let email = contactForm.email.value.trim();
-      let phone = contactForm.phone.value.trim();
-      let message = contactForm.message.value.trim();
-
-      if (!name) { contactForm.name.classList.add('is-invalid'); valid = false; } else { contactForm.name.classList.remove('is-invalid'); }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { contactForm.email.classList.add('is-invalid'); valid = false; } else { contactForm.email.classList.remove('is-invalid'); }
-      if (!/^\d{7,15}$/.test(phone.replace(/\D/g,''))) { contactForm.phone.classList.add('is-invalid'); valid = false; } else { contactForm.phone.classList.remove('is-invalid'); }
-      if (!message) { contactForm.message.classList.add('is-invalid'); valid = false; } else { contactForm.message.classList.remove('is-invalid'); }
-
-      if (!valid) {
-        document.getElementById('formAlert').classList.add('d-none');
-        return;
+      
+      let isValid = true;
+      const formData = {
+        name: this.name.value,
+        email: this.email.value,
+        phone: this.phone.value,
+        message: this.message.value
+      };
+      
+      // Validate all fields
+      const nameError = validateName(formData.name);
+      const emailError = validateEmail(formData.email);
+      const phoneError = validatePhone(formData.phone);
+      const messageError = validateMessage(formData.message);
+      
+      // Show errors or success for each field
+      if (nameError) {
+        showError('name', nameError);
+        isValid = false;
+      } else {
+        hideError('name');
       }
-
-      document.getElementById('formAlert').classList.remove('d-none');
-      contactForm.reset();
+      
+      if (emailError) {
+        showError('email', emailError);
+        isValid = false;
+      } else {
+        hideError('email');
+      }
+      
+      if (phoneError) {
+        showError('phone', phoneError);
+        isValid = false;
+      } else {
+        hideError('phone');
+      }
+      
+      if (messageError) {
+        showError('message', messageError);
+        isValid = false;
+      } else {
+        hideError('message');
+      }
+      
+      // Handle form submission
+      if (isValid) {
+        // Clear any previous alerts
+        const existingAlert = document.getElementById('formAlert');
+        if (existingAlert) {
+          existingAlert.remove();
+        }
+        
+        // Create success message
+        const successAlert = document.createElement('div');
+        successAlert.id = 'formAlert';
+        successAlert.className = 'alert alert-success mt-3';
+        successAlert.innerHTML = `
+          <i class="bi bi-check-circle"></i> 
+          <strong>Thank you, ${formData.name.split(' ')[0]}!</strong> 
+          Your message has been successfully validated and would be sent to our team.
+          <br><small>This is a demo form - no actual email is sent.</small>
+        `;
+        
+        // Insert after the submit button
+        this.querySelector('button[type="submit"]').after(successAlert);
+        
+        // Reset form and clear validation classes
+        this.reset();
+        clearAllErrors();
+        
+        // Scroll to success message
+        successAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        // Remove any existing success message
+        const existingAlert = document.getElementById('formAlert');
+        if (existingAlert && existingAlert.classList.contains('alert-success')) {
+          existingAlert.remove();
+        }
+        
+        // Focus on first invalid field
+        const firstInvalidField = this.querySelector('.is-invalid');
+        if (firstInvalidField) {
+          firstInvalidField.focus();
+        }
+      }
     });
-
-    ['name','email','phone','message'].forEach(id => {
-      contactForm[id].addEventListener('input', function() {
-        this.classList.remove('is-invalid');
+    
+    // Reset button functionality
+    const resetButton = contactForm.querySelector('button[type="reset"]');
+    if (resetButton) {
+      resetButton.addEventListener('click', function() {
+        setTimeout(() => {
+          clearAllErrors();
+          const alert = document.getElementById('formAlert');
+          if (alert) alert.remove();
+        }, 10);
       });
-    });
+    }
   }
 });
 
-// --- Checkout page logic ---
+
+// --- Checkout page logic (Enhanced checkout form validation) ---
 document.addEventListener('DOMContentLoaded', () => {
   if (window.location.pathname.endsWith('checkout.html')) {
     loadCartFromStorage();
     renderCheckoutCart();
     updateCheckoutTotal();
+    
     const shippingSelect = document.getElementById('shipping-method');
     if (shippingSelect) shippingSelect.addEventListener('change', updateCheckoutTotal);
 
     const checkoutForm = document.getElementById('checkout-form');
     if (checkoutForm) {
+      
+      // Enhanced validation messages for checkout
+      function showCheckoutError(fieldName, message) {
+        const field = checkoutForm[fieldName];
+        if (field) {
+          let errorElement = field.parentNode.querySelector('.checkout-error');
+          if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'checkout-error text-danger small mt-1';
+            field.parentNode.appendChild(errorElement);
+          }
+          errorElement.textContent = message;
+          errorElement.style.display = 'block';
+          field.classList.add('is-invalid');
+        }
+      }
+      
+      function hideCheckoutError(fieldName) {
+        const field = checkoutForm[fieldName];
+        if (field) {
+          const errorElement = field.parentNode.querySelector('.checkout-error');
+          if (errorElement) {
+            errorElement.style.display = 'none';
+          }
+          field.classList.remove('is-invalid');
+        }
+      }
+      
       checkoutForm.onsubmit = function(e) {
         e.preventDefault();
         let valid = true;
-        let form = this;
-        let name = form.name.value.trim();
-        let email = form.email.value.trim();
-        let mobile = form.mobile.value.trim();
-        let address = form.address.value.trim();
-        let card = form.card.value.trim().replace(/\s/g,'');
-        let expiry = form.expiry.value.trim();
-        let cvv = form.cvv.value.trim();
-        let cardname = form.cardname.value.trim();
-
-        if (!name) { form.name.classList.add('is-invalid'); valid = false; } else { form.name.classList.remove('is-invalid'); }
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { form.email.classList.add('is-invalid'); valid = false; } else { form.email.classList.remove('is-invalid'); }
-        if (!/^\+?\d{8,15}$/.test(mobile.replace(/\s/g,''))) { form.mobile.classList.add('is-invalid'); valid = false; } else { form.mobile.classList.remove('is-invalid'); }
-        if (!address) { form.address.classList.add('is-invalid'); valid = false; } else { form.address.classList.remove('is-invalid'); }
-        if (!/^\d{16}$/.test(card)) { form.card.classList.add('is-invalid'); valid = false; } else { form.card.classList.remove('is-invalid'); }
-        if (!/^\d{2}\/\d{2}$/.test(expiry)) { form.expiry.classList.add('is-invalid'); valid = false; } else { form.expiry.classList.remove('is-invalid'); }
-        if (!/^\d{3}$/.test(cvv)) { form.cvv.classList.add('is-invalid'); valid = false; } else { form.cvv.classList.remove('is-invalid'); }
-        if (!cardname) { form.cardname.classList.add('is-invalid'); valid = false; } else { form.cardname.classList.remove('is-invalid'); }
+        
+        const validations = [
+          { field: 'name', value: this.name.value.trim(), message: 'Please enter your full name' },
+          { field: 'email', value: this.email.value.trim(), test: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Please enter a valid email address' },
+          { field: 'mobile', value: this.mobile.value.trim().replace(/\s/g,''), test: /^\+?\d{8,15}$/, message: 'Mobile number must be 8-15 digits' },
+          { field: 'address', value: this.address.value.trim(), message: 'Please enter your full address' },
+          { field: 'card', value: this.card.value.trim().replace(/\s/g,''), test: /^\d{16}$/, message: 'Card number must be 16 digits' },
+          { field: 'expiry', value: this.expiry.value.trim(), test: /^\d{2}\/\d{2}$/, message: 'Expiry must be in MM/YY format' },
+          { field: 'cvv', value: this.cvv.value.trim(), test: /^\d{3}$/, message: 'CVV must be 3 digits' },
+          { field: 'cardname', value: this.cardname.value.trim(), message: 'Please enter the name on your card' }
+        ];
+        
+        validations.forEach(validation => {
+          if (!validation.value || (validation.test && !validation.test.test(validation.value))) {
+            showCheckoutError(validation.field, validation.message);
+            valid = false;
+          } else {
+            hideCheckoutError(validation.field);
+          }
+        });
 
         loadCartFromStorage();
         if (cart.length === 0) {
-          document.getElementById('checkout-success').innerHTML = `<div class="alert alert-danger">Your cart is empty.</div>`;
+          document.getElementById('checkout-success').innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Your cart is empty. Please add items before checkout.</div>`;
           return;
         }
+        
         if (!valid) {
-          document.getElementById('checkout-success').innerHTML = `<div class="alert alert-danger">Please fill all fields correctly.</div>`;
+          document.getElementById('checkout-success').innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Please correct the errors above before proceeding.</div>`;
           return;
         }
+        
         document.getElementById('checkout-success').innerHTML = `
-          <div class="alert alert-success">Payment Successful! Thank you, your order is placed.</div>
+          <div class="alert alert-success">
+            <i class="bi bi-check-circle"></i> 
+            <strong>Payment Successful!</strong> Thank you for your order, ${this.name.value.split(' ')[0]}. 
+            Your items will be shipped to the provided address.
+          </div>
         `;
+        
         localStorage.removeItem('cart');
         cart = [];
         renderCheckoutCart();
         updateCheckoutTotal();
-        form.reset();
+        this.reset();
       };
     }
   }
@@ -372,7 +627,7 @@ function updateCheckoutTotal() {
   document.getElementById('checkout-total').textContent = `Total: $${total.toFixed(2)}`;
 }
 
-// --- Products page search ---
+// --- Products page search (Consolidated and more robust) ---
 function renderProductCard(prod) {
   return `
     <div class="col-md-6 col-lg-3 product" data-name="${prod.name}">
@@ -397,7 +652,8 @@ function renderProducts(containerId, limit = null) {
       let products = data.filter(p => p.name); // Only show products with a name
       if (limit) products = products.slice(0, limit);
       document.getElementById(containerId).innerHTML = products.map(renderProductCard).join('');
-    });
+    })
+    .catch(err => console.error('Error loading products JSON', err)); // Added error handling
 }
 
 function filterProducts(category) {
@@ -417,6 +673,21 @@ function filterProducts(category) {
 document.addEventListener('DOMContentLoaded', () => {
   if (window.location.pathname.endsWith('products.html')) {
     renderProducts('products');
+    // If navigated with ?q=, prefill and filter
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) {
+      const input = document.getElementById('searchInputProducts');
+      if (input) input.value = q;
+      fetch('products-data.json')
+        .then(res => res.json())
+        .then(products => {
+          const filtered = products.filter(p => p.name && p.name.toLowerCase().includes(q.toLowerCase()));
+          document.getElementById('products').innerHTML = filtered.length
+            ? filtered.map(renderProductCard).join('')
+            : '<div class="col-12"><div class="alert alert-warning">No products found.</div></div>';
+        });
+    }
   }
 });
 

@@ -8,51 +8,59 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="has-sidebar">
   <!-- Navbar -->
   <!-- Vertical sidebar nav (in-page sections) -->
-  <nav class="sidebar-nav position-fixed top-0 start-0 vh-100 d-flex flex-column justify-content-center align-items-center">
-    <a href="#home" class="sidebar-logo mb-3 fw-bold text-neon text-decoration-none">
+  <nav class="sidebar-nav position-fixed top-0 start-0 vh-100 d-flex flex-column justify-content-center align-items-center" role="navigation" aria-label="Main navigation">
+    <a href="#home" class="sidebar-logo mb-3 fw-bold text-neon text-decoration-none" aria-label="TechOps home">
       <i class="bi bi-cpu"></i>
       <span class="sidebar-logo-text ms-1">TechOps</span>
     </a>
-    <div class="sidebar-links d-flex flex-column align-items-center w-100">
-      <a href="#home" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none active">
-        <i class="bi bi-house-door me-2"></i>
-        <span>Home</span>
-      </a>
-      <a href="#products" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none">
-        <i class="bi bi-box-seam me-2"></i>
-        <span>Products</span>
-      </a>
-      <a href="#contact" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none">
-        <i class="bi bi-envelope me-2"></i>
-        <span>Contact</span>
-      </a>
-    </div>
+    <ul class="sidebar-links list-unstyled d-flex flex-column align-items-center w-100" role="menubar">
+      <li role="none">
+        <a href="#home" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none active" role="menuitem" aria-current="page">
+          <i class="bi bi-house-door me-2" aria-hidden="true"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      <li role="none">
+        <a href="#products" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none" role="menuitem">
+          <i class="bi bi-box-seam me-2" aria-hidden="true"></i>
+          <span>Products</span>
+        </a>
+      </li>
+      <li role="none">
+        <a href="#contact" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none" role="menuitem">
+          <i class="bi bi-envelope me-2" aria-hidden="true"></i>
+          <span>Contact</span>
+        </a>
+      </li>
+    </ul>
     <div class="sidebar-glow"></div>
   </nav>
 
   <!-- Top navbar (page switching) -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-darktech py-3" style="margin-left:200px;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-darktech py-3">
     <div class="container">
       <a class="navbar-brand" href="index.html">TechOps</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button>
+      </button> 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
           <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
         </ul>
-        <!-- ...search and cart buttons... -->
-        <button class="btn btn-neon" type="button" data-bs-toggle="modal" data-bs-target="#cartModal">
-            <i class="bi bi-cart"></i> Cart
+      </div>
+      <!-- Always-visible actions -->
+      <div class="d-flex align-items-center ms-auto flex-grow-1 flex-lg-grow-0 gap-2 flex-wrap navbar-actions">
+        <button class="btn btn-neon" type="button" onclick="showCart()">
+          <i class="bi bi-cart"></i> Cart
         </button>
-        <form id="searchForm" class="d-flex ms-3" role="search" style="min-width:220px;">
-          <input id="searchInput" class="form-control me-2 bg-darktech-2 border-neon-subtle text-white" type="search" placeholder="Search products…" aria-label="Search">
+        <form id="searchForm" class="d-flex w-100" role="search" style="min-width: 220px;">
+          <input id="searchInput" class="form-control me-2 bg-darktech-2 border-neon-subtle" type="search" placeholder="Search products…" aria-label="Search" style="flex:1 1 auto; max-width:none;">
           <button class="btn btn-neon" type="submit"><i class="bi bi-search"></i></button>
         </form>
       </div>
@@ -70,7 +78,7 @@
       </div>
     </div>
   </div>
-  <main style="margin-left:110px;">
+  <main id="main-content">
     <!-- Hero -->
     <header id="home" class="hero section-py">
       <div class="container">
@@ -102,7 +110,7 @@
         <div id="featured-products" class="row g-4"></div>
       </div>
     </section>
-    <!-- Contact -->
+    <!-- Contact (fix to put validation feedback onto js script)--> 
     <section id="contact" class="section-py">
       <div class="container">
         <div class="row g-4">
@@ -111,30 +119,24 @@
             <form id="contactForm" novalidate class="mt-3">
               <div class="mb-3">
                 <label for="name" class="form-label">Name *</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-                <div class="invalid-feedback">Please enter your name.</div>
+                <input type="text" class="form-control" id="name" name="name">
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email *</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-                <div class="invalid-feedback">Enter a valid email address.</div>
+                <input type="email" class="form-control" id="email" name="email">
               </div>
               <div class="mb-3">
                 <label for="phone" class="form-label">Phone *</label>
-                <input type="tel" class="form-control" id="phone" name="phone" maxlength="15" required>
-                <div class="invalid-feedback">Phone must be digits only (max 15).</div>
+                <input type="tel" class="form-control" id="phone" name="phone" maxlength="15">
               </div>
               <div class="mb-3">
                 <label for="message" class="form-label">Message *</label>
-                <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
-                <div class="invalid-feedback">Please include a short message.</div>
+                <textarea id="message" name="message" class="form-control" rows="5"></textarea>
               </div>
               <button type="submit" class="btn btn-neon btn-lg">Send</button>
-              <div id="formAlert" class="alert alert-success mt-3 d-none" role="alert">
-                Thanks! Your message has been validated (demo).
-              </div>
             </form>
           </div>
+          <!-- Store Info -->
           <div class="col-lg-6">
             <div class="contact-card p-4 rounded-4 h-100">
               <h5 class="mb-3">Store Details</h5>
@@ -155,7 +157,11 @@
   </main>
   <footer class="py-4 bg-darktech-2 border-top border-neon-subtle">
     <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
-      <div class="small text-muted">&copy; <span id="year"></span> TechOps — Draft for SIT120 5.3D</div>
+      <div class="small text-muted">
+        &copy; <span id="year"></span> TechOps. All rights reserved.<br>
+        Last updated: <span id="lastUpdate"></span><br>
+        Contact: <a href="mailto:support@techops.example" class="link-neon">support@techops.example</a>
+      </div>
       <div class="d-flex gap-3 small">
         <a href="index.html" class="link-neon">Home</a>
         <a href="products.html" class="link-neon">Products</a>

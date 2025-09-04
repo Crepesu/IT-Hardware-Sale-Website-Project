@@ -24,6 +24,16 @@
           <li class="nav-item"><a class="nav-link active" href="contact.html">Contact</a></li>
         </ul>
       </div>
+      <!-- Cart and searchbar on contact.html -->
+      <!-- <div class="d-flex align-items-center ms-auto flex-grow-1 flex-lg-grow-0 gap-2 flex-wrap navbar-actions">
+        <button class="btn btn-neon" type="button" onclick="showCart()">
+          <i class="bi bi-cart"></i> Cart
+        </button>
+        <form id="searchFormProducts" class="d-flex w-100" role="search" style="min-width:220px;">
+          <input id="searchInputProducts" class="form-control me-2 bg-darktech-2 border-neon-subtle" type="search" placeholder="Search products…" aria-label="Search" style="flex:1 1 auto; max-width:none;">
+          <button class="btn btn-neon" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+      </div> -->
     </div>
   </nav>
 
@@ -37,27 +47,20 @@
           <div class="mb-3">
             <label for="name" class="form-label">Name *</label>
             <input type="text" class="form-control" id="name" name="name" required>
-            <div class="invalid-feedback">Please enter your name.</div>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email *</label>
             <input type="email" class="form-control" id="email" name="email" required>
-            <div class="invalid-feedback">Enter a valid email address.</div>
           </div>
           <div class="mb-3">
             <label for="phone" class="form-label">Phone *</label>
             <input type="tel" class="form-control" id="phone" name="phone" maxlength="15" required>
-            <div class="invalid-feedback">Phone must be digits only (max 15).</div>
           </div>
           <div class="mb-3">
             <label for="message" class="form-label">Message *</label>
             <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
-            <div class="invalid-feedback">Please include a short message.</div>
           </div>
           <button type="submit" class="btn btn-neon btn-lg">Send</button>
-          <div id="formAlert" class="alert alert-success mt-3 d-none" role="alert">
-            Thanks! Your message has been validated (demo).
-          </div>
         </form>
       </div>
       <!-- Store Info -->
