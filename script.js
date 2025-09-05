@@ -196,29 +196,50 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Sidebar highlight ---
-// --- Sidebar highlight (scroll-based) ---
-document.addEventListener('scroll', () => {
-  const sections = ['home', 'products', 'contact'];
-  let found = false;
-  sections.forEach(id => {
+// --- Sidebar highlight (replace the old scroll handler) ---
+/* Remove the old buggy scroll listener that had:
+   link.classList.add('actConsole.log("");ive');
+*/
+document.querySelectorAll('.sidebar-link[href^="#"]'); // no-op to show location
+
+// Add a robust highlighter using IntersectionObserver
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebarLinks = Array.from(document.querySelectorAll('.sidebar-link[href^="#"]'));
+  if (sidebarLinks.length === 0) return;
+
+  // Click highlight immediately
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      sidebarLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+    });
+  });
+
+  // Observe sections/headers to update highlight on scroll
+  const ids = sidebarLinks
+    .map(l => l.getAttribute('href'))
+    .filter(href => href && href.startsWith('#'))
+    .map(href => href.slice(1));
+
+  const observer = new IntersectionObserver((entries) => {
+    // Pick the most visible entry that is intersecting
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+    if (!visible) return;
+
+    const id = visible.target.id;
+    const activeLink = document.querySelector(`.sidebar-link[href="#${id}"]`);
+    if (!activeLink) return;
+
+    sidebarLinks.forEach(l => l.classList.remove('active'));
+    activeLink.classList.add('active');
+  }, { threshold: 0.55, rootMargin: '0px 0px -10% 0px' });
+
+  ids.forEach(id => {
     const el = document.getElementById(id);
-    const link = document.querySelector(`.sidebar-link[href="#${id}"]`);
-    if (el && link) {
-      const rect = el.getBoundingClientRect();
-      // Adjust the offset for when a section is considered active
-      const offset = window.innerHeight / 2; // Mid-screen
-      if (!found && rect.top <= offset && rect.bottom >= offset) {
-        // Only set active if it's not already the active one from a click
-        if (!link.classList.contains('active-from-click')) {
-          document.querySelectorAll('.sidebar-link').forEach(item => item.classList.remove('active'));
-          link.classList.add('active');
-        }
-        found = true;
-      } else {
-        link.classList.remove('active');
-        link.classList.remove('active-from-click'); // Remove click-based active if scrolled away
-      }
-    }
+    if (el) observer.observe(el);
   });
 });
 
@@ -474,97 +495,168 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// --- Checkout page logic (Enhanced checkout form validation) ---
+// --- Checkout page logic (contact-style real-time validation) ---
 document.addEventListener('DOMContentLoaded', () => {
-  if (window.location.pathname.endsWith('checkout.html')) {
+  if (!window.location.pathname.endsWith('checkout.html')) return;
+
+  loadCartFromStorage();
+  renderCheckoutCart();
+  updateCheckoutTotal();
+
+  const shippingSelect = document.getElementById('shipping-method');
+  if (shippingSelect) shippingSelect.addEventListener('change', updateCheckoutTotal);
+
+  const form = document.getElementById('checkout-form');
+  if (!form) return;
+
+  // Create placeholder error nodes
+  const fields = ['name','email','mobile','address','card','expiry','cvv','cardname'];
+  fields.forEach(fn => {
+    const input = form[fn];
+    if (input && !input.parentNode.querySelector('.checkout-error')) {
+      const err = document.createElement('div');
+      err.className = 'checkout-error text-danger small mt-1';
+      err.style.display = 'none';
+      input.parentNode.appendChild(err);
+    }
+  });
+
+  // Validators
+  const v = {
+    name: (s) => {
+      if (!s.trim()) return 'Please enter your full name';
+      if (s.trim().length < 2) return 'Name must be at least 2 characters';
+      if (!/^[a-zA-Z\s'-]+$/.test(s)) return 'Only letters, spaces, apostrophes, hyphens allowed';
+      return null;
+    },
+    email: (s) => {
+      if (!s.trim()) return 'Please enter your email';
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? null : 'Enter a valid email (example@domain.com)';
+    },
+    mobile: (s) => {
+      if (!s.trim()) return 'Please enter your mobile number';
+      const digits = s.replace(/\D/g, '');
+      if (digits.length < 8 || digits.length > 15) return 'Mobile must be 8–15 digits';
+      if (!/^[\d\s+\-()]+$/.test(s)) return 'Contains invalid characters';
+      return null;
+    },
+    address: (s) => (!s.trim() ? 'Please enter your full address' : (s.trim().length < 5 ? 'Address looks too short' : null)),
+    card: (s) => {
+      const digits = s.replace(/\D/g,'')
+      if (digits.length !== 16) return 'Card number must be 16 digits';
+      return null;
+    },
+    expiry: (s) => {
+      if (!/^\d{2}\/\d{2}$/.test(s)) return 'Expiry must be MM/YY';
+      const [mm, yy] = s.split('/').map(x => parseInt(x,10));
+      if (mm < 1 || mm > 12) return 'Invalid month';
+      const now = new Date();
+      const exp = new Date(2000 + yy, mm); // end of month
+      const current = new Date(now.getFullYear(), now.getMonth() + 1);
+      return exp < current ? 'Card is expired' : null;
+    },
+    cvv: (s) => (/^\d{3}$/.test(s) ? null : 'CVV must be 3 digits'),
+    cardname: (s) => {
+      if (!s.trim()) return 'Please enter the name on your card';
+      if (s.trim().length < 2) return 'Name on card looks too short';
+      if (!/^[a-zA-Z\s'-]+$/.test(s)) return 'Only letters, spaces, apostrophes, hyphens allowed';
+      return null;
+    }
+  };
+
+  // Helpers
+  function showErr(name, msg) {
+    const input = form[name];
+    const el = input?.parentNode.querySelector('.checkout-error');
+    if (!input || !el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+    input.classList.add('is-invalid');
+    input.classList.remove('is-valid');
+  }
+  function hideErr(name) {
+    const input = form[name];
+    const el = input?.parentNode.querySelector('.checkout-error');
+    if (!input || !el) return;
+    el.style.display = 'none';
+    input.classList.remove('is-invalid');
+    input.classList.add('is-valid');
+  }
+  function validateField(name) {
+    const value = form[name].value;
+    const err = v[name](value);
+    if (err) showErr(name, err); else hideErr(name);
+    return !err;
+  }
+  function clearValidation() {
+    fields.forEach(n => {
+      form[n]?.classList.remove('is-invalid','is-valid');
+      const el = form[n]?.parentNode.querySelector('.checkout-error');
+      if (el) el.style.display = 'none';
+    });
+  }
+
+  // Live formatting + validation
+  form.card.addEventListener('input', () => {
+    const digits = form.card.value.replace(/\D/g,'').slice(0,16);
+    form.card.value = digits.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+    validateField('card');
+  });
+  form.expiry.addEventListener('input', () => {
+    let vRaw = form.expiry.value.replace(/\D/g,'').slice(0,4);
+    if (vRaw.length >= 3) vRaw = vRaw.slice(0,2) + '/' + vRaw.slice(2);
+    form.expiry.value = vRaw;
+    validateField('expiry');
+  });
+  form.cvv.addEventListener('input', () => {
+    form.cvv.value = form.cvv.value.replace(/\D/g,'').slice(0,3);
+    validateField('cvv');
+  });
+  form.mobile.addEventListener('input', () => validateField('mobile'));
+  form.name.addEventListener('input', () => validateField('name'));
+  form.email.addEventListener('input', () => validateField('email'));
+  form.address.addEventListener('input', () => validateField('address'));
+  form.cardname.addEventListener('input', () => validateField('cardname'));
+
+  // Submit
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
     loadCartFromStorage();
+    const successBox = document.getElementById('checkout-success');
+    successBox.innerHTML = '';
+
+    if (cart.length === 0) {
+      successBox.innerHTML = '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Your cart is empty. Please add items before checkout.</div>';
+      return;
+    }
+
+    let allValid = true;
+    fields.forEach(n => { if (!validateField(n)) allValid = false; });
+
+    if (!allValid) {
+      successBox.innerHTML = '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Please correct the highlighted fields.</div>';
+      form.querySelector('.is-invalid')?.focus();
+      return;
+    }
+
+    successBox.innerHTML = `<div class="alert alert-success"><i class="bi bi-check-circle"></i> <strong>Payment Successful!</strong> Thank you, ${form.name.value.split(' ')[0]}.</div>`;
+    localStorage.removeItem('cart');
+    cart = [];
     renderCheckoutCart();
     updateCheckoutTotal();
-    
-    const shippingSelect = document.getElementById('shipping-method');
-    if (shippingSelect) shippingSelect.addEventListener('change', updateCheckoutTotal);
+    form.reset();
+    clearValidation();
+  });
 
-    const checkoutForm = document.getElementById('checkout-form');
-    if (checkoutForm) {
-      
-      // Enhanced validation messages for checkout
-      function showCheckoutError(fieldName, message) {
-        const field = checkoutForm[fieldName];
-        if (field) {
-          let errorElement = field.parentNode.querySelector('.checkout-error');
-          if (!errorElement) {
-            errorElement = document.createElement('div');
-            errorElement.className = 'checkout-error text-danger small mt-1';
-            field.parentNode.appendChild(errorElement);
-          }
-          errorElement.textContent = message;
-          errorElement.style.display = 'block';
-          field.classList.add('is-invalid');
-        }
-      }
-      
-      function hideCheckoutError(fieldName) {
-        const field = checkoutForm[fieldName];
-        if (field) {
-          const errorElement = field.parentNode.querySelector('.checkout-error');
-          if (errorElement) {
-            errorElement.style.display = 'none';
-          }
-          field.classList.remove('is-invalid');
-        }
-      }
-      
-      checkoutForm.onsubmit = function(e) {
-        e.preventDefault();
-        let valid = true;
-        
-        const validations = [
-          { field: 'name', value: this.name.value.trim(), message: 'Please enter your full name' },
-          { field: 'email', value: this.email.value.trim(), test: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Please enter a valid email address' },
-          { field: 'mobile', value: this.mobile.value.trim().replace(/\s/g,''), test: /^\+?\d{8,15}$/, message: 'Mobile number must be 8-15 digits' },
-          { field: 'address', value: this.address.value.trim(), message: 'Please enter your full address' },
-          { field: 'card', value: this.card.value.trim().replace(/\s/g,''), test: /^\d{16}$/, message: 'Card number must be 16 digits' },
-          { field: 'expiry', value: this.expiry.value.trim(), test: /^\d{2}\/\d{2}$/, message: 'Expiry must be in MM/YY format' },
-          { field: 'cvv', value: this.cvv.value.trim(), test: /^\d{3}$/, message: 'CVV must be 3 digits' },
-          { field: 'cardname', value: this.cardname.value.trim(), message: 'Please enter the name on your card' }
-        ];
-        
-        validations.forEach(validation => {
-          if (!validation.value || (validation.test && !validation.test.test(validation.value))) {
-            showCheckoutError(validation.field, validation.message);
-            valid = false;
-          } else {
-            hideCheckoutError(validation.field);
-          }
-        });
-
-        loadCartFromStorage();
-        if (cart.length === 0) {
-          document.getElementById('checkout-success').innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Your cart is empty. Please add items before checkout.</div>`;
-          return;
-        }
-        
-        if (!valid) {
-          document.getElementById('checkout-success').innerHTML = `<div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> Please correct the errors above before proceeding.</div>`;
-          return;
-        }
-        
-        document.getElementById('checkout-success').innerHTML = `
-          <div class="alert alert-success">
-            <i class="bi bi-check-circle"></i> 
-            <strong>Payment Successful!</strong> Thank you for your order, ${this.name.value.split(' ')[0]}. 
-            Your items will be shipped to the provided address.
-          </div>
-        `;
-        
-        localStorage.removeItem('cart');
-        cart = [];
-        renderCheckoutCart();
-        updateCheckoutTotal();
-        this.reset();
-      };
-    }
-  }
+  // Optional: clear status on reset (e.g., if you add a reset button later)
+  form.addEventListener('reset', () => {
+    setTimeout(() => {
+      clearValidation();
+      const successBox = document.getElementById('checkout-success');
+      if (successBox) successBox.innerHTML = '';
+    }, 10);
+  });
 });
 
 // --- Render cart in checkout ---
