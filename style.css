@@ -397,3 +397,160 @@ section:nth-child(even) {
     width: 100%;
   }
 }
+
+/* ======================
+   Mobile responsiveness (FIXED)
+   ====================== */
+
+/* XS phones (<=576px) */
+@media (max-width: 576px) {
+  /* Hide sidebar completely on phones */
+  .sidebar-nav { display: none !important; }
+  body.has-sidebar { padding-left: 0 !important; }
+  
+  /* Reduce section padding */
+  .section-py { padding-top: 2rem; padding-bottom: 2rem; }
+  
+  /* Hero section improvements */
+  .hero { padding: 2rem 0; }
+  .hero .display-4 { font-size: 1.75rem; line-height: 1.3; }
+  .hero .lead { font-size: 0.95rem; }
+  .hero .btn-lg { 
+    width: 100%; 
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  /* Product cards mobile optimization */
+  .card-tech { 
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .card-tech img {
+    height: 200px;
+    max-height: 200px;
+    object-fit: cover;
+  }
+  .card-tech .card-body { padding: 1rem; }
+  .card-tech .card-title { font-size: 1rem; margin-bottom: 0.5rem; }
+  .card-tech .card-text { font-size: 0.9rem; }
+  .card-tech .price { font-size: 1.1rem; }
+  
+  /* Navbar mobile fixes */
+  .navbar-brand { font-size: 1.2rem; }
+  .navbar-toggler { border: none; }
+  
+  /* CRITICAL FIX: Force navbar actions to behave properly */
+  .navbar-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Make cart button full width */
+  .navbar-actions .btn {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  /* Make search form full width and fix display */
+  .navbar-actions form {
+    width: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+  }
+  
+  /* Fix search input sizing */
+  .navbar form[role="search"] {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+  
+  .navbar form[role="search"] input[type="search"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+  
+  .navbar form[role="search"] .btn {
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Forms prevent zoom */
+  .form-control, .form-select { font-size: 16px; }
+  
+  /* Footer stack vertically */
+  footer .container {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  /* Filter buttons wrap better */
+  .filter-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Fix any flex issues with d-flex classes */
+  .d-flex.ms-3 {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* Small phones (<=480px) - extra narrow */
+@media (max-width: 480px) {
+  .container { padding-left: 1rem; padding-right: 1rem; }
+  
+  .hero .display-4 { font-size: 1.5rem; }
+  .hero .lead { font-size: 0.9rem; }
+  
+  /* Tighter card spacing */
+  .card-tech .card-body { padding: 0.75rem; }
+  .card-tech .card-title { font-size: 0.95rem; }
+}
+
+/* Tablets (<=768px) */
+@media (max-width: 768px) {
+  .section-py { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+  .hero .display-4 { font-size: 2rem; }
+  
+  /* Product images slightly smaller */
+  .card-tech img { max-height: 180px; }
+}
+
+/* Large tablets (<=991.98px) - Bootstrap lg breakpoint */
+@media (max-width: 991.98px) {
+  /* Navbar collapse styling */
+  .navbar-collapse {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  /* Force navbar actions to stack */
+  .navbar-actions {
+    flex-direction: column !important;
+    gap: 0.75rem;
+    width: 100%;
+  }
+  
+  .navbar-actions .btn { 
+    flex: 0 0 auto; 
+    width: 100%;
+  }
+  .navbar-actions form { 
+    flex: 1 1 100%; 
+    width: 100%;
+  }
+}
