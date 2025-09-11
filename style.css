@@ -554,3 +554,174 @@ section:nth-child(even) {
     width: 100%;
   }
 }
+
+/* ADD these improved card responsive rules: */
+
+/* Better card grid responsiveness */
+@media (max-width: 576px) {
+  /* Make cards full width on mobile */
+  .card-tech {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Better image aspect ratio */
+  .card-tech img {
+    height: 180px;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+  }
+  
+  /* Improve button sizing */
+  .card-tech .btn {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  /* Better price display */
+  .card-tech .price {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  /* Badge improvements */
+  .card-tech .badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+/* Medium screens (tablets) */
+@media (max-width: 768px) {
+  .card-tech img {
+    height: 160px;
+  }
+  
+  .card-tech .card-title {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+}
+
+/* Ensure proper grid behavior */
+@media (max-width: 991px) {
+  /* 2 cards per row on tablets */
+  .col-lg-3 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 576px) {
+  /* 1 card per row on phones */
+  .col-lg-3, .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* --- Carousel styling (MOBILE IMPROVED) --- */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+  color: #0066cc;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #0066cc;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+}
+
+.carousel-indicators {
+  margin-bottom: -2rem;
+}
+
+.carousel-indicators [data-bs-target] {
+  background-color: #0066cc;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+}
+
+.carousel-item {
+  transition: transform 0.6s ease-in-out;
+  padding: 0 15px; /* Add padding to prevent edge cutoff */
+}
+
+/* Mobile-specific carousel fixes */
+@media (max-width: 576px) {
+  /* Make carousel controls larger for easier touch */
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 8%;
+  }
+  
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  /* Single product per slide on mobile */
+  .carousel-item .row {
+    justify-content: center !important;
+  }
+  
+  /* Better spacing for mobile cards */
+  .carousel-item .card-tech {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  /* Adjust carousel padding */
+  .carousel-item {
+    padding: 0 30px;
+  }
+  
+  /* Move indicators up slightly */
+  .carousel-indicators {
+    margin-bottom: -1rem;
+  }
+  
+  /* Make cards slightly smaller on mobile */
+  .carousel-item .card-tech img {
+    height: 180px;
+    object-fit: cover;
+  }
+  
+  .carousel-item .card-tech .card-body {
+    padding: 1rem;
+  }
+  
+  .carousel-item .card-tech .card-title {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  
+  .carousel-item .btn-sm {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+/* Tablet improvements */
+@media (max-width: 768px) {
+  .carousel-item .card-tech img {
+    height: 160px;
+  }
+  
+  .carousel-item {
+    padding: 0 20px;
+  }
+}
+
+/* Ensure smooth transitions */
+.carousel-item.active,
+.carousel-item-next,
+.carousel-item-prev {
+  display: block;
+}

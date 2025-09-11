@@ -106,7 +106,31 @@
           <h2 class="text-neon">Featured Products</h2>
           <a href="products.html" class="btn btn-outline-neon">View All Products</a>
         </div>
-        <div id="featured-products" class="row g-4"></div>
+        
+        <!-- Carousel for Featured Products -->
+        <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner" id="featured-products-carousel">
+            <!-- Products will be loaded here -->
+          </div>
+          
+          <!-- Carousel controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          
+          <!-- Carousel indicators -->
+          <div class="carousel-indicators" id="carousel-indicators">
+            <!-- Indicators will be added dynamically -->
+          </div>
+        </div>
+        
+        <!-- Fallback for regular grid (hidden by default) -->
+        <div id="featured-products" class="row g-4" style="display: none;"></div>
       </div>
     </section>
     <!-- Contact (fix to put validation feedback onto js script)--> 
