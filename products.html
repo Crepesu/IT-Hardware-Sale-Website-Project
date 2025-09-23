@@ -10,28 +10,29 @@
 </head>
 <body>
   <!-- Top navbar for page navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-darktech py-3">
+  <nav class="navbar navbar-expand-lg navbar-light py-3" style="background: linear-gradient(135deg, #ffffff, #f8f9fa); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(0, 102, 204, 0.1);">
     <div class="container">
-      <a class="navbar-brand" href="index.html">TechOps</a>
+      <a class="navbar-brand fw-bold" href="index.html" style="color: #0066cc; font-size: 1.5rem; text-decoration: none;">TechOps</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="products.html">Products</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html" style="color: #333333; font-weight: 500;">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="products.html" style="color: #0066cc; font-weight: 600; border-bottom: 2px solid #0066cc;">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html" style="color: #333333; font-weight: 500;">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="checkout.html" style="color: #333333; font-weight: 500;">Checkout</a></li>
         </ul>
       </div>
       <!-- Always-visible actions -->
       <div class="d-flex align-items-center ms-auto flex-grow-1 flex-lg-grow-0 gap-2 flex-wrap navbar-actions">
-        <button class="btn btn-neon" type="button" onclick="showCart()">
+        <button class="btn" type="button" onclick="showCart()" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem; font-weight: 500;">
           <i class="bi bi-cart"></i> Cart
         </button>
         <form id="searchFormProducts" class="d-flex w-100" role="search" style="min-width:220px;">
-          <input id="searchInputProducts" class="form-control me-2 bg-darktech-2 border-neon-subtle" type="search" placeholder="Search products…" aria-label="Search" style="flex:1 1 auto; max-width:none;">
-          <button class="btn btn-neon" type="submit"><i class="bi bi-search"></i></button>
+          <input id="searchInputProducts" class="form-control me-2" type="search" placeholder="Search products…" aria-label="Search" style="flex:1 1 auto; max-width:none; border: 2px solid #e0e0e0; border-radius: 0.5rem;">
+          <button class="btn" type="submit" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem;"><i class="bi bi-search"></i></button>
         </form>
       </div>
     </div>
@@ -40,12 +41,12 @@
   <!-- Cart Modal (reuse from index) -->
   <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content bg-darktech-2 text-white">
-        <div class="modal-header">
-          <h5 class="modal-title" id="cartModalLabel">Cart</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-content" style="background: white; border: 1px solid #e0e0e0; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+        <div class="modal-header" style="background: linear-gradient(135deg, #f8f9fa, #ffffff); border-bottom: 1px solid #e0e0e0; border-radius: 1rem 1rem 0 0;">
+          <h5 class="modal-title" id="cartModalLabel" style="color: #333333; font-weight: 600;">Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body" id="cart-modal-body"></div>
+        <div class="modal-body" id="cart-modal-body" style="color: #333333;"></div>
       </div>
     </div>
   </div>
@@ -66,13 +67,14 @@
   </main>
 
   <!-- Footer -->
-  <footer class="py-4 bg-darktech-2 border-top border-neon-subtle mt-5">
-    <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
-      <div class="small text-muted">&copy; <span id="year"></span> TechOps — SIT120 Project</div>
-      <div class="d-flex gap-3 small">
-        <a href="index.html" class="link-neon">Home</a>
-        <a href="products.html" class="link-neon">Products</a>
-        <a href="contact.html" class="link-neon">Contact Us</a>
+  <footer class="py-5 mt-5" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); color: #495057; text-align: center; border-top: 1px solid rgba(0, 102, 204, 0.08); box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.03);">
+    <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+      <div class="fw-medium">&copy; <span id="year"></span> TechOps — SIT120 Project</div>
+      <div class="d-flex gap-4">
+        <a href="index.html" style="color: #0066cc; text-decoration: none; font-weight: 500;">Home</a>
+        <a href="products.html" style="color: #0066cc; text-decoration: none; font-weight: 500;">Products</a>
+        <a href="contact.html" style="color: #0066cc; text-decoration: none; font-weight: 500;">Contact Us</a>
+        <a href="checkout.html" style="color: #0066cc; text-decoration: none; font-weight: 500;">Checkout</a>
       </div>
     </div>
   </footer>

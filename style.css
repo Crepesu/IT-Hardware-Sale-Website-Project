@@ -725,3 +725,104 @@ section:nth-child(even) {
 .carousel-item-prev {
   display: block;
 }
+
+/* --- Standardized Light Theme Navigation --- */
+.navbar-light-theme {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
+}
+
+.navbar-brand-styled {
+  color: #0066cc;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-link-styled {
+  color: #333333;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-link-styled:hover {
+  color: #0066cc;
+}
+
+.nav-link-active {
+  color: #0066cc !important;
+  font-weight: 600;
+  border-bottom: 2px solid #0066cc;
+}
+
+.navbar-button-styled {
+  background: linear-gradient(135deg, #0066cc, #0080ff);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.navbar-button-styled:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+}
+
+.navbar-search-styled {
+  border: 2px solid #e0e0e0;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.navbar-search-styled:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+}
+
+/* --- Standardized Light Theme Footer --- */
+.footer-light-theme {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #495057;
+  text-align: center;
+  border-top: 1px solid rgba(0, 102, 204, 0.08);
+  box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.03);
+  padding: 3rem 0;
+  margin-top: 5rem;
+}
+
+.footer-link-styled {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-link-styled:hover {
+  color: #0080ff;
+}
+
+/* --- Standardized Modal Styling --- */
+.modal-light-theme {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header-light-theme {
+  background: linear-gradient(135deg, #f8f9fa, #ffffff);
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.modal-title-styled {
+  color: #333333;
+  font-weight: 600;
+}
+
+.modal-body-styled {
+  color: #333333;
+}
