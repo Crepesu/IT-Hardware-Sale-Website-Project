@@ -2,74 +2,1612 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Checkout — TechOps</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <style>
+    /* Enhanced checkout container with clean white background */
+    .checkout-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1rem;
+      background: #ffffff;
+      min-height: calc(100vh - 200px);
+    }
+    
+    /* Page header styling */
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2rem 0;
+    }
+    
+    .page-header h1 {
+      color: #0066cc;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(0, 102, 204, 0.2);
+    }
+    
+    .page-header p {
+      color: #666666;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+    
+    /* Enhanced form sections with light styling */
+    .form-section {
+      background: linear-gradient(145deg, #fafbfc, #ffffff);
+      padding: 2.5rem;
+      border-radius: 1.2rem;
+      color: #333;
+      margin-bottom: 2.5rem;
+      border: 1px solid rgba(0, 102, 204, 0.08);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04), 
+                  0 3px 10px rgba(0, 0, 0, 0.02),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      transition: all 0.3s ease;
+    }
+    
+    .form-section:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 
+                  0 6px 15px rgba(0, 0, 0, 0.04),
+                  inset 0 1px 0 rgba(255, 255, 255, 1);
+      border-color: rgba(0, 102, 204, 0.15);
+    }
+    
+    /* Enhanced form styling for light theme */
+    .form-section .form-label {
+      color: #2c3e50 !important;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .form-section .form-control,
+    .form-section .form-select {
+      background-color: #ffffff !important;
+      border: 1.5px solid #e8ecef !important;
+      color: #2c3e50 !important;
+      font-weight: 500;
+      border-radius: 0.6rem !important;
+      padding: 0.85rem 1.1rem !important;
+      transition: all 0.3s ease !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      font-size: 0.95rem;
+    }
+    
+    .form-section .form-control:focus,
+    .form-section .form-select:focus {
+      background-color: #ffffff !important;
+      border-color: #0066cc !important;
+      box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.15), 
+                  0 4px 12px rgba(0, 102, 204, 0.1) !important;
+      color: #2c3e50 !important;
+      transform: translateY(-1px);
+    }
+    
+    .form-section .form-control::placeholder {
+      color: #adb5bd !important;
+      opacity: 1;
+      font-weight: 400;
+    }
+    
+    .form-section h5 {
+      color: #0066cc !important;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      font-size: 1.3rem;
+      text-shadow: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(0, 102, 204, 0.1);
+    }
+    
+    .form-section h5 i {
+      color: #0066cc;
+      font-size: 1.4rem;
+      opacity: 0.8;
+    }
+    
+    /* Enhanced cart summary with light theme */
+    .cart-summary {
+      background: linear-gradient(145deg, #fafbfc, #ffffff);
+      padding: 2.5rem;
+      border-radius: 1.2rem;
+      color: #333;
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+      border: 1px solid rgba(0, 102, 204, 0.08);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04), 
+                  0 3px 10px rgba(0, 0, 0, 0.02),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      transition: all 0.3s ease;
+    }
+    
+    .cart-summary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 
+                  0 6px 15px rgba(0, 0, 0, 0.04);
+    }
+    
+    .cart-summary h5 {
+      color: #0066cc !important;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      font-size: 1.3rem;
+      text-shadow: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(0, 102, 204, 0.1);
+    }
+    
+    .cart-summary h5 i {
+      color: #0066cc;
+      font-size: 1.4rem;
+      opacity: 0.8;
+    }
+    
+    .cart-summary h6 {
+      color: #2c3e50 !important;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    .cart-summary .text-muted {
+      color: #6c757d !important;
+      font-size: 0.9rem;
+    }
+    
+    .cart-summary strong {
+      color: #2c3e50 !important;
+      font-weight: 600;
+    }
+    
+    /* Enhanced cart items with light theme */
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(0, 102, 204, 0.08);
+      transition: all 0.3s ease;
+      border-radius: 0.4rem;
+      margin: 0 -0.5rem;
+      padding-left: 0.8rem;
+      padding-right: 0.8rem;
+    }
+    
+    .cart-item:hover {
+      background: rgba(0, 102, 204, 0.03);
+      transform: translateX(3px);
+      border-bottom-color: rgba(0, 102, 204, 0.15);
+    }
+    
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    
+    .cart-item h6 {
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+    
+    .cart-item .text-muted {
+      color: #6c757d !important;
+      font-size: 0.85rem;
+    }
+    
+    .cart-item strong {
+      color: #0066cc;
+      font-weight: 600;
+    }
+    
+    /* Enhanced error messages */
+    .error-message {
+      color: #dc3545;
+      font-size: 0.85rem;
+      margin-top: 0.4rem;
+      padding: 0.6rem 0.8rem;
+      background: rgba(220, 53, 69, 0.08);
+      border-radius: 0.4rem;
+      border-left: 3px solid #dc3545;
+      animation: fadeInShake 0.4s ease-in-out;
+      font-weight: 500;
+    }
+    
+    @keyframes fadeInShake {
+      0% { opacity: 0; transform: translateX(-10px); }
+      50% { opacity: 1; transform: translateX(2px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    
+    /* Enhanced success message */
+    .success-message {
+      background: linear-gradient(135deg, #d1f2dd, #a8e6cf);
+      color: #0f5132;
+      padding: 2.5rem;
+      border-radius: 1rem;
+      margin: 2.5rem 0;
+      box-shadow: 0 8px 25px rgba(15, 81, 50, 0.15);
+      border: 1px solid #b8e6c1;
+      animation: slideInUp 0.5s ease-out;
+      text-align: center;
+    }
+    
+    .success-message h3 {
+      color: #0f5132;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Enhanced order summary with light theme */
+    .order-summary {
+      background: linear-gradient(145deg, #f8f9fa, #ffffff);
+      padding: 1.8rem;
+      border-radius: 0.8rem;
+      margin-top: 1.8rem;
+      color: #2c3e50;
+      border: 1px solid rgba(0, 102, 204, 0.08);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+    
+    .order-summary span {
+      color: #2c3e50 !important;
+      font-weight: 500;
+    }
+    
+    .order-summary strong {
+      color: #2c3e50 !important;
+      font-weight: 600;
+    }
+    
+    .order-summary .text-success {
+      color: #28a745 !important;
+      font-weight: 600;
+    }
+    
+    .order-summary hr {
+      border-color: rgba(0, 102, 204, 0.15) !important;
+      margin: 1.2rem 0;
+      opacity: 0.8;
+    }
+    
+    .order-summary .text-neon {
+      font-size: 1.1rem;
+      color: #0066cc !important;
+      font-weight: 700;
+    }
+    
+    /* Enhanced payment button */
+    .btn-success {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      border: none;
+      color: white;
+      padding: 1.1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 0.6rem;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.25);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-success:hover {
+      background: linear-gradient(135deg, #20c997, #28a745);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.35);
+      color: white;
+    }
+    
+    .btn-success:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+    }
+    
+    .btn-success:disabled {
+      opacity: 0.7;
+      transform: none;
+      cursor: not-allowed;
+    }
+    
+    /* Enhanced shipping options */
+    .shipping-option {
+      background: linear-gradient(145deg, #fafbfc, #ffffff);
+      border: 1.5px solid rgba(0, 102, 204, 0.08);
+      border-radius: 0.6rem;
+      padding: 1.2rem;
+      margin: 0.6rem 0;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      color: #2c3e50;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+    
+    .shipping-option:hover {
+      border-color: rgba(0, 102, 204, 0.2);
+      background: linear-gradient(145deg, #ffffff, #fafbfc);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(0, 102, 204, 0.08);
+    }
+    
+    .shipping-option.selected {
+      border-color: #0066cc;
+      background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+      box-shadow: 0 4px 20px rgba(0, 102, 204, 0.15);
+    }
+    
+    .shipping-option h5 {
+      color: #2c3e50;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      padding: 0;
+    }
+    
+    .shipping-option small {
+      color: #6c757d;
+      font-size: 0.85rem;
+    }
+    
+    .shipping-option .badge {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      border-radius: 0.4rem;
+      padding: 0.4rem 0.8rem;
+      margin-left: 1rem;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    
+    /* Footer enhancements */
+    .footer-enhanced {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      color: #495057;
+      text-align: center;
+      padding: 3rem 0;
+      margin-top: 5rem;
+      border-top: 1px solid rgba(0, 102, 204, 0.08);
+      box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.03);
+    }
+    
+    /* Overall body improvements */
+    body {
+      background: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #2c3e50;
+    }
+    
+    /* Smooth transitions for all interactive elements */
+    * {
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+    
+    /* Focus states improvement */
+    button:focus,
+    .form-control:focus,
+    .form-select:focus {
+      outline: none;
+    }
+    
+    /* Loading spinner enhancement */
+    .spinner-border {
+      color: #0066cc;
+    }
+    
+    /* Enhanced Payment Card Brand Icons */
+    .payment-brands {
+      display: flex;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+      align-items: center;
+      padding: 1rem;
+      background: linear-gradient(145deg, #f8f9fa, #ffffff);
+      border-radius: 0.6rem;
+      border: 1px solid rgba(0, 102, 204, 0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+    
+    .payment-brand {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 55px;
+      height: 35px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: capitalize;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .payment-brand:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .payment-brand:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+    
+    .payment-brand::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    .payment-brand:hover::before {
+      left: 100%;
+    }
+    
+    .visa {
+      background: linear-gradient(135deg, #1a1f71, #2d4bc7);
+      color: white;
+      border: 1px solid #1a1f71;
+      position: relative;
+    }
+    
+    .visa::after {
+      content: '••••';
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 8px;
+      opacity: 0.7;
+    }
+    
+    .mastercard {
+      background: linear-gradient(135deg, #eb001b, #ff5f00);
+      color: white;
+      border: 1px solid #eb001b;
+      position: relative;
+    }
+    
+    .mastercard::before {
+      content: '';
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: #ff5f00;
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+    
+    .mastercard::after {
+      content: '';
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: #eb001b;
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+    
+    .amex {
+      background: linear-gradient(135deg, #006fcf, #0099e6);
+      color: white;
+      border: 1px solid #006fcf;
+      position: relative;
+    }
+    
+    .amex::after {
+      content: '◆';
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 10px;
+      opacity: 0.8;
+    }
+    
+    .payment-info-label {
+      color: #495057;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-right: 1rem;
+      text-transform: none;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .payment-info-label::before {
+      content: '🔒';
+      font-size: 1rem;
+    }
+    
+    /* Mobile Responsiveness Enhancements */
+    @media (max-width: 768px) {
+      /* Checkout container mobile optimization */
+      .checkout-container {
+        padding: 1.5rem 0.5rem;
+      }
+      
+      /* Page header mobile */
+      .page-header {
+        margin-bottom: 2rem;
+        padding: 1rem 0;
+      }
+      
+      .page-header h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .page-header p {
+        font-size: 1rem;
+      }
+      
+      /* Form sections mobile */
+      .form-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 1rem;
+      }
+      
+      .form-section h5 {
+        font-size: 1.1rem;
+        margin-bottom: 1.2rem;
+      }
+      
+      /* Navigation mobile improvements */
+      .navbar-actions {
+        margin-top: 1rem;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      
+      .navbar-actions form {
+        width: 100% !important;
+        min-width: auto !important;
+      }
+      
+      /* Payment brands mobile */
+      .payment-brands {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        margin: 1rem 0;
+      }
+      
+      .payment-brand {
+        width: 50px;
+        height: 32px;
+        font-size: 0.65rem;
+      }
+      
+      .payment-info-label {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        margin-right: 0;
+        font-size: 0.85rem;
+      }
+      
+      /* Cart summary mobile */
+      .cart-summary {
+        position: static !important;
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+      }
+      
+      /* Form controls mobile */
+      .form-section .form-control,
+      .form-section .form-select {
+        padding: 0.75rem 0.9rem !important;
+        font-size: 1rem !important; /* Prevents zoom on iOS */
+        border-radius: 0.5rem !important;
+      }
+      
+      /* Shipping options mobile */
+      .shipping-option {
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-radius: 0.5rem;
+      }
+      
+      .shipping-option h5 {
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
+      }
+      
+      .shipping-option small {
+        font-size: 0.8rem;
+      }
+      
+      .shipping-option .badge {
+        margin-left: 0.5rem;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+      }
+      
+      /* Button mobile */
+      .btn-success {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        font-size: 0.95rem;
+        margin-top: 1rem;
+      }
+      
+      /* Cart items mobile */
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 1rem 0.5rem;
+      }
+      
+      .cart-item:hover {
+        transform: none;
+      }
+      
+      /* Error messages mobile */
+      .error-message {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.7rem;
+      }
+      
+      /* Success message mobile */
+      .success-message {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border-radius: 0.75rem;
+      }
+      
+      .success-message h3 {
+        font-size: 1.3rem;
+      }
+      
+      /* Order summary mobile */
+      .order-summary {
+        padding: 1.2rem;
+        margin-top: 1.2rem;
+        border-radius: 0.6rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* Extra small screens */
+      .checkout-container {
+        padding: 1rem 0.25rem;
+      }
+      
+      .form-section {
+        padding: 1rem;
+        border-radius: 0.75rem;
+      }
+      
+      .page-header h1 {
+        font-size: 1.75rem;
+      }
+      
+      .payment-brand {
+        width: 45px;
+        height: 28px;
+        font-size: 0.6rem;
+      }
+      
+      .form-section h5 {
+        font-size: 1rem;
+      }
+      
+      .cart-summary {
+        padding: 1rem;
+      }
+    }
+    
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .payment-brand:hover {
+        transform: none;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+      }
+      
+      .form-section:hover {
+        transform: none;
+      }
+      
+      .cart-summary:hover {
+        transform: none;
+      }
+      
+      .shipping-option:hover {
+        transform: none;
+        background: linear-gradient(145deg, #fafbfc, #ffffff);
+      }
+      
+      .btn-success:hover {
+        transform: none;
+      }
+      
+      /* Enhanced touch targets */
+      .payment-brand {
+        min-height: 44px; /* iOS accessibility guideline */
+        min-width: 44px;
+      }
+      
+      .shipping-option {
+        min-height: 44px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(0, 102, 204, 0.1);
+      }
+      
+      .btn-success {
+        min-height: 44px;
+        -webkit-tap-highlight-color: rgba(40, 167, 69, 0.2);
+      }
+      
+      .form-control,
+      .form-select {
+        min-height: 44px;
+        -webkit-appearance: none; /* Better iOS styling */
+        appearance: none; /* Standard property */
+      }
+    }
+    
+    /* iOS specific optimizations */
+    @supports (-webkit-touch-callout: none) {
+      .form-control,
+      .form-select {
+        font-size: 16px !important; /* Prevents zoom on focus */
+        border-radius: 10px !important; /* iOS native feel */
+      }
+      
+      .btn-success {
+        border-radius: 10px !important;
+      }
+      
+      .payment-brand {
+        border-radius: 10px !important;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main class="container py-5">
-    <h2 class="mb-4">Checkout</h2>
-    <div class="row g-4">
-      <!-- Left: Customer & Payment Info -->
-      <div class="col-lg-6">
-        <form id="checkout-form" class="bg-darktech-2 p-4 rounded-4 text-white">
-          <h5 class="mb-3">Contact & Shipping</h5>
-          <div class="mb-3">
-            <label class="form-label">Full Name</label>
-            <input type="text" class="form-control" name="name" placeholder="John Doe">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" placeholder="you@email.com">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Mobile</label>
-            <input type="text" class="form-control" name="mobile" placeholder="+61 xxxx xxxx xxx">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Address</label>
-            <input type="text" class="form-control" name="address" placeholder="123 Main St">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Shipping Method</label>
-            <select class="form-select" name="shipping" id="shipping-method">
-              <option value="standard" selected>Standard (Free, 5-7 days)</option>
-              <option value="express">Express ($15, 2-3 days)</option>
-            </select>
-          </div>
-          <h5 class="mb-3">Payment</h5>
-          <div class="mb-3">
-            <label class="form-label">Card Number</label>
-            <input type="text" class="form-control" name="card" maxlength="19" placeholder="1234 5678 9012 3456">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Expiry</label>
-            <input type="text" class="form-control" name="expiry" maxlength="5" placeholder="MM/YY">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">CVV</label>
-            <input type="text" class="form-control" name="cvv" maxlength="3" placeholder="123">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Name on Card</label>
-            <input type="text" class="form-control" name="cardname" placeholder="John Doe">
-          </div>
-          <button type="submit" class="btn btn-neon mt-2 w-100">Pay Now</button>
-          <div id="checkout-success" class="mt-3"></div>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light py-3" style="background: linear-gradient(135deg, #ffffff, #f8f9fa); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(0, 102, 204, 0.1);">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html" style="color: #0066cc; font-size: 1.5rem; text-decoration: none;">TechOps</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html" style="color: #333333; font-weight: 500;">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="products.html" style="color: #333333; font-weight: 500;">Products</a></li>
+          <li class="nav-item"><a class="nav-link" href="contact.html" style="color: #333333; font-weight: 500;">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link active" href="checkout.html" style="color: #0066cc; font-weight: 600; border-bottom: 2px solid #0066cc;">Checkout</a></li>
+        </ul>
+      </div>
+      <!-- Always-visible actions -->
+      <div class="d-flex align-items-center ms-auto flex-grow-1 flex-lg-grow-0 gap-2 flex-wrap navbar-actions">
+        <button class="btn" type="button" onclick="showCart()" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem; font-weight: 500;">
+          <i class="bi bi-cart"></i> Cart
+        </button>
+        <form id="searchFormCheckout" class="d-flex w-100" role="search" style="min-width:220px;">
+          <input id="searchInputCheckout" class="form-control me-2" type="search" placeholder="Search products…" aria-label="Search" style="flex:1 1 auto; max-width:none; border: 2px solid #e0e0e0; border-radius: 0.5rem;">
+          <button class="btn" type="submit" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem;"><i class="bi bi-search"></i></button>
         </form>
       </div>
-      <!-- Right: Cart Summary -->
-      <div class="col-lg-6">
-        <div class="bg-darktech-2 p-4 rounded-4 text-white h-100">
-          <h5 class="mb-3">Your Cart</h5>
-          <div id="cart-items"></div>
-          <div class="fw-bold mb-2" id="checkout-total"></div>
+    </div>
+  </nav>
+
+  <!-- Cart Modal -->
+  <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="background: linear-gradient(145deg, #ffffff, #f8f9fa); color: #333333; border: 1px solid rgba(0, 102, 204, 0.1); border-radius: 1rem; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);">
+        <div class="modal-header" style="border-bottom: 1px solid rgba(0, 102, 204, 0.1);">
+          <h5 class="modal-title" id="cartModalLabel" style="color: #0066cc; font-weight: 600;">Cart</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body" id="cart-modal-body"></div>
       </div>
     </div>
-  </main>
+  </div>
+
+  <div id="app"></div>
+
+  <script>
+    const { createApp, ref, reactive, computed, onMounted } = Vue;
+
+    // Child Component: CheckoutForm
+    const CheckoutForm = {
+      props: {
+        cartItems: Array,
+        cartTotal: Number,
+        shippingCost: Number
+      },
+      emits: ['order-placed', 'shipping-changed'],
+      setup(props, { emit }) {
+        // Form data
+        const formData = reactive({
+          // Contact & Shipping
+          name: '',
+          email: '',
+          mobile: '',
+          address: '',
+          city: '',
+          state: '',
+          postcode: '',
+          shippingMethod: 'standard',
+          
+          // Payment
+          cardNumber: '',
+          expiryDate: '',
+          cvv: '',
+          cardName: ''
+        });
+
+        // Validation errors
+        const errors = reactive({
+          name: '',
+          email: '',
+          mobile: '',
+          address: '',
+          city: '',
+          state: '',
+          postcode: '',
+          cardNumber: '',
+          expiryDate: '',
+          cvv: '',
+          cardName: ''
+        });
+
+        // UI state
+        const isProcessing = ref(false);
+        const orderPlaced = ref(false);
+        const orderNumber = ref('');
+
+        // Shipping options
+        const shippingOptions = ref([
+          { value: 'standard', label: 'Standard Shipping', cost: 0, description: 'Free, 5-7 business days' },
+          { value: 'express', label: 'Express Shipping', cost: 15, description: '$15.00, 2-3 business days' },
+          { value: 'overnight', label: 'Overnight Shipping', cost: 35, description: '$35.00, Next business day' }
+        ]);
+
+        // Computed total
+        const finalTotal = computed(() => {
+          return props.cartTotal + props.shippingCost;
+        });
+
+        // Validation functions
+        const validateName = () => {
+          if (!formData.name.trim()) {
+            errors.name = 'Full name is required';
+            return false;
+          }
+          errors.name = '';
+          return true;
+        };
+
+        const validateEmail = () => {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!formData.email.trim()) {
+            errors.email = 'Email is required';
+            return false;
+          }
+          if (!emailRegex.test(formData.email)) {
+            errors.email = 'Please enter a valid email address';
+            return false;
+          }
+          errors.email = '';
+          return true;
+        };
+
+        const validateMobile = () => {
+          const mobileRegex = /^[\d\s+\-()]{10,15}$/;
+          if (!formData.mobile.trim()) {
+            errors.mobile = 'Mobile number is required';
+            return false;
+          }
+          if (!mobileRegex.test(formData.mobile)) {
+            errors.mobile = 'Please enter a valid mobile number';
+            return false;
+          }
+          errors.mobile = '';
+          return true;
+        };
+
+        const validateAddress = () => {
+          if (!formData.address.trim()) {
+            errors.address = 'Address is required';
+            return false;
+          }
+          errors.address = '';
+          return true;
+        };
+
+        const validateCity = () => {
+          if (!formData.city.trim()) {
+            errors.city = 'City is required';
+            return false;
+          }
+          errors.city = '';
+          return true;
+        };
+
+        const validateState = () => {
+          if (!formData.state.trim()) {
+            errors.state = 'State is required';
+            return false;
+          }
+          errors.state = '';
+          return true;
+        };
+
+        const validatePostcode = () => {
+          const postcodeRegex = /^\d{4}$/;
+          if (!formData.postcode.trim()) {
+            errors.postcode = 'Postcode is required';
+            return false;
+          }
+          if (!postcodeRegex.test(formData.postcode)) {
+            errors.postcode = 'Please enter a valid 4-digit postcode';
+            return false;
+          }
+          errors.postcode = '';
+          return true;
+        };
+
+        const validateCardNumber = () => {
+          const cardRegex = /^\d{4}\s\d{4}\s\d{4}\s\d{4}$/;
+          if (!formData.cardNumber.trim()) {
+            errors.cardNumber = 'Card number is required';
+            return false;
+          }
+          if (!cardRegex.test(formData.cardNumber)) {
+            errors.cardNumber = 'Please enter a valid card number (1234 5678 9012 3456)';
+            return false;
+          }
+          errors.cardNumber = '';
+          return true;
+        };
+
+        const validateExpiryDate = () => {
+          const expiryRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+          if (!formData.expiryDate.trim()) {
+            errors.expiryDate = 'Expiry date is required';
+            return false;
+          }
+          if (!expiryRegex.test(formData.expiryDate)) {
+            errors.expiryDate = 'Please enter a valid expiry date (MM/YY)';
+            return false;
+          }
+          errors.expiryDate = '';
+          return true;
+        };
+
+        const validateCvv = () => {
+          const cvvRegex = /^\d{3,4}$/;
+          if (!formData.cvv.trim()) {
+            errors.cvv = 'CVV is required';
+            return false;
+          }
+          if (!cvvRegex.test(formData.cvv)) {
+            errors.cvv = 'Please enter a valid CVV (3-4 digits)';
+            return false;
+          }
+          errors.cvv = '';
+          return true;
+        };
+
+        const validateCardName = () => {
+          if (!formData.cardName.trim()) {
+            errors.cardName = 'Name on card is required';
+            return false;
+          }
+          errors.cardName = '';
+          return true;
+        };
+
+        const validateForm = () => {
+          const validations = [
+            validateName(),
+            validateEmail(),
+            validateMobile(),
+            validateAddress(),
+            validateCity(),
+            validateState(),
+            validatePostcode(),
+            validateCardNumber(),
+            validateExpiryDate(),
+            validateCvv(),
+            validateCardName()
+          ];
+          return validations.every(Boolean);
+        };
+
+        // Shipping method change
+        const changeShippingMethod = (method) => {
+          formData.shippingMethod = method;
+          const selectedOption = shippingOptions.value.find(opt => opt.value === method);
+          emit('shipping-changed', selectedOption.cost);
+        };
+
+        // Format card number input
+        const formatCardNumber = () => {
+          let value = formData.cardNumber.replace(/\s/g, '').replace(/\D/g, '');
+          value = value.substring(0, 16);
+          value = value.replace(/(.{4})/g, '$1 ').trim();
+          formData.cardNumber = value;
+        };
+
+        // Format expiry date input
+        const formatExpiryDate = () => {
+          let value = formData.expiryDate.replace(/\D/g, '');
+          if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2, 4);
+          }
+          formData.expiryDate = value;
+        };
+
+        // Handle form submission
+        const handleSubmit = async () => {
+          if (!validateForm()) {
+            return;
+          }
+
+          isProcessing.value = true;
+
+          // Simulate payment processing
+          try {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Generate order number
+            orderNumber.value = 'TO' + Date.now().toString().substr(-8);
+            
+            // Place order
+            const orderData = {
+              orderNumber: orderNumber.value,
+              customerInfo: { ...formData },
+              items: props.cartItems,
+              subtotal: props.cartTotal,
+              shipping: props.shippingCost,
+              total: finalTotal.value,
+              timestamp: new Date().toISOString()
+            };
+            
+            emit('order-placed', orderData);
+            orderPlaced.value = true;
+            
+            // Clear cart (this would typically be handled by the parent)
+            if (typeof clearCart === 'function') {
+              clearCart();
+            }
+            
+          } catch (error) {
+            console.error('Payment failed:', error);
+          } finally {
+            isProcessing.value = false;
+          }
+        };
+
+        return {
+          formData,
+          errors,
+          isProcessing,
+          orderPlaced,
+          orderNumber,
+          shippingOptions,
+          finalTotal,
+          validateName,
+          validateEmail,
+          validateMobile,
+          validateAddress,
+          validateCity,
+          validateState,
+          validatePostcode,
+          validateCardNumber,
+          validateExpiryDate,
+          validateCvv,
+          validateCardName,
+          changeShippingMethod,
+          formatCardNumber,
+          formatExpiryDate,
+          handleSubmit
+        };
+      },
+      template: `
+        <div class="checkout-form">
+          <!-- Order Success Message -->
+          <div v-if="orderPlaced" class="success-message">
+            <h4><i class="bi bi-check-circle me-2"></i>Order Placed Successfully!</h4>
+            <p><strong>Order Number:</strong> {{ orderNumber }}</p>
+            <p>Thank you {{ formData.name }}! Your order has been confirmed and will be shipped to:</p>
+            <address>
+              {{ formData.address }}<br>
+              {{ formData.city }}, {{ formData.state }} {{ formData.postcode }}
+            </address>
+            <p>A confirmation email has been sent to {{ formData.email }}</p>
+            <div class="mt-3">
+              <a href="index.html" class="btn btn-neon me-2">Continue Shopping</a>
+              <a href="products.html" class="btn btn-outline-neon">View Products</a>
+            </div>
+          </div>
+
+          <!-- Checkout Form -->
+          <form v-if="!orderPlaced" @submit.prevent="handleSubmit">
+            <!-- Contact & Shipping Information -->
+            <div class="form-section">
+              <h5 class="mb-3"><i class="bi bi-person me-2"></i>Contact & Shipping Information</h5>
+              
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label for="name" class="form-label">Full Name *</label>
+                  <input 
+                    type="text" 
+                    id="name"
+                    class="form-control"
+                    v-model="formData.name"
+                    @blur="validateName"
+                    :class="{ 'is-invalid': errors.name }"
+                    placeholder="John Doe"
+                  >
+                  <div v-if="errors.name" class="error-message">{{ errors.name }}</div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="email" class="form-label">Email Address *</label>
+                  <input 
+                    type="email" 
+                    id="email"
+                    class="form-control"
+                    v-model="formData.email"
+                    @blur="validateEmail"
+                    :class="{ 'is-invalid': errors.email }"
+                    placeholder="john@example.com"
+                  >
+                  <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="mobile" class="form-label">Mobile Number *</label>
+                  <input 
+                    type="tel" 
+                    id="mobile"
+                    class="form-control"
+                    v-model="formData.mobile"
+                    @blur="validateMobile"
+                    :class="{ 'is-invalid': errors.mobile }"
+                    placeholder="+61 400 000 000"
+                  >
+                  <div v-if="errors.mobile" class="error-message">{{ errors.mobile }}</div>
+                </div>
+                
+                <div class="col-12 mb-3">
+                  <label for="address" class="form-label">Street Address *</label>
+                  <input 
+                    type="text" 
+                    id="address"
+                    class="form-control"
+                    v-model="formData.address"
+                    @blur="validateAddress"
+                    :class="{ 'is-invalid': errors.address }"
+                    placeholder="123 Main Street"
+                  >
+                  <div v-if="errors.address" class="error-message">{{ errors.address }}</div>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                  <label for="city" class="form-label">City *</label>
+                  <input 
+                    type="text" 
+                    id="city"
+                    class="form-control"
+                    v-model="formData.city"
+                    @blur="validateCity"
+                    :class="{ 'is-invalid': errors.city }"
+                    placeholder="Melbourne"
+                  >
+                  <div v-if="errors.city" class="error-message">{{ errors.city }}</div>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                  <label for="state" class="form-label">State *</label>
+                  <select 
+                    id="state"
+                    class="form-select"
+                    v-model="formData.state"
+                    @change="validateState"
+                    :class="{ 'is-invalid': errors.state }"
+                  >
+                    <option value="">Select State</option>
+                    <option value="NSW">NSW</option>
+                    <option value="VIC">VIC</option>
+                    <option value="QLD">QLD</option>
+                    <option value="SA">SA</option>
+                    <option value="WA">WA</option>
+                    <option value="TAS">TAS</option>
+                    <option value="NT">NT</option>
+                    <option value="ACT">ACT</option>
+                  </select>
+                  <div v-if="errors.state" class="error-message">{{ errors.state }}</div>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                  <label for="postcode" class="form-label">Postcode *</label>
+                  <input 
+                    type="text" 
+                    id="postcode"
+                    class="form-control"
+                    v-model="formData.postcode"
+                    @blur="validatePostcode"
+                    :class="{ 'is-invalid': errors.postcode }"
+                    placeholder="3000"
+                    maxlength="4"
+                  >
+                  <div v-if="errors.postcode" class="error-message">{{ errors.postcode }}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Shipping Method -->
+            <div class="form-section">
+              <h5 class="mb-3"><i class="bi bi-truck me-2"></i>Shipping Method</h5>
+              <div 
+                v-for="option in shippingOptions" 
+                :key="option.value"
+                @click="changeShippingMethod(option.value)"
+                class="shipping-option"
+                :class="{ selected: formData.shippingMethod === option.value }"
+              >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <input 
+                      type="radio" 
+                      :id="option.value"
+                      :value="option.value"
+                      v-model="formData.shippingMethod"
+                      class="form-check-input me-2"
+                    >
+                    <strong>{{ option.label }}</strong>
+                    <div class="text-muted small">{{ option.description }}</div>
+                  </div>
+                  <div class="text-end">
+                    <strong v-if="option.cost > 0">\${{ option.cost.toFixed(2) }}</strong>
+                    <strong v-else class="text-success">FREE</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payment Information -->
+            <div class="form-section">
+              <h5 class="mb-3"><i class="bi bi-credit-card me-2"></i>Payment Information</h5>
+              
+              <div class="payment-brands">
+                <span class="payment-info-label">We Accept:</span>
+                <div class="payment-brand visa">Visa</div>
+                <div class="payment-brand mastercard">MC</div>
+                <div class="payment-brand amex">Amex</div>
+              </div>
+              
+              <div class="row mt-3">
+                <div class="col-12 mb-3">
+                  <label for="cardNumber" class="form-label">Card Number *</label>
+                  <input 
+                    type="text" 
+                    id="cardNumber"
+                    class="form-control"
+                    v-model="formData.cardNumber"
+                    @input="formatCardNumber"
+                    @blur="validateCardNumber"
+                    :class="{ 'is-invalid': errors.cardNumber }"
+                    placeholder="1234 5678 9012 3456"
+                    maxlength="19"
+                  >
+                  <div v-if="errors.cardNumber" class="error-message">{{ errors.cardNumber }}</div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="expiryDate" class="form-label">Expiry Date *</label>
+                  <input 
+                    type="text" 
+                    id="expiryDate"
+                    class="form-control"
+                    v-model="formData.expiryDate"
+                    @input="formatExpiryDate"
+                    @blur="validateExpiryDate"
+                    :class="{ 'is-invalid': errors.expiryDate }"
+                    placeholder="MM/YY"
+                    maxlength="5"
+                  >
+                  <div v-if="errors.expiryDate" class="error-message">{{ errors.expiryDate }}</div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="cvv" class="form-label">CVV *</label>
+                  <input 
+                    type="text" 
+                    id="cvv"
+                    class="form-control"
+                    v-model="formData.cvv"
+                    @blur="validateCvv"
+                    :class="{ 'is-invalid': errors.cvv }"
+                    placeholder="123"
+                    maxlength="4"
+                  >
+                  <div v-if="errors.cvv" class="error-message">{{ errors.cvv }}</div>
+                </div>
+                
+                <div class="col-12 mb-3">
+                  <label for="cardName" class="form-label">Name on Card *</label>
+                  <input 
+                    type="text" 
+                    id="cardName"
+                    class="form-control"
+                    v-model="formData.cardName"
+                    @blur="validateCardName"
+                    :class="{ 'is-invalid': errors.cardName }"
+                    placeholder="John Doe"
+                  >
+                  <div v-if="errors.cardName" class="error-message">{{ errors.cardName }}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid">
+              <button 
+                type="submit" 
+                class="btn btn-neon btn-lg"
+                :disabled="isProcessing"
+              >
+                <span v-if="isProcessing">
+                  <i class="bi bi-arrow-repeat spin me-2"></i>
+                  Processing Payment...
+                </span>
+                <span v-else>
+                  <i class="bi bi-lock me-2"></i>
+                  Complete Order - \${{ finalTotal.toFixed(2) }}
+                </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      `
+    };
+
+    // Child Component: CartSummary
+    const CartSummary = {
+      props: {
+        cartItems: Array,
+        cartTotal: Number,
+        shippingCost: Number
+      },
+      setup(props) {
+        const finalTotal = computed(() => {
+          return props.cartTotal + props.shippingCost;
+        });
+
+        return {
+          finalTotal
+        };
+      },
+      template: `
+        <div class="cart-summary">
+          <h5 class="mb-3"><i class="bi bi-bag me-2"></i>Order Summary</h5>
+          
+          <!-- Empty Cart -->
+          <div v-if="cartItems.length === 0" class="text-center py-4">
+            <i class="bi bi-cart-x display-4 text-muted"></i>
+            <p class="text-muted mt-2">Your cart is empty</p>
+            <a href="products.html" class="btn btn-outline-neon">Browse Products</a>
+          </div>
+          
+          <!-- Cart Items -->
+          <div v-else>
+            <div v-for="item in cartItems" :key="item.id" class="cart-item">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">{{ item.name }}</h6>
+                <small class="text-muted">Qty: {{ item.quantity }}</small>
+              </div>
+              <div class="text-end">
+                <strong>\${{ (item.price * item.quantity).toFixed(2) }}</strong>
+              </div>
+            </div>
+            
+            <!-- Order Totals -->
+            <div class="order-summary">
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <span>\${{ cartTotal.toFixed(2) }}</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Shipping:</span>
+                <span v-if="shippingCost > 0">\${{ shippingCost.toFixed(2) }}</span>
+                <span v-else class="text-success">FREE</span>
+              </div>
+              <hr>
+              <div class="d-flex justify-content-between">
+                <strong>Total:</strong>
+                <strong class="text-neon">\${{ finalTotal.toFixed(2) }}</strong>
+              </div>
+            </div>
+            
+            <div class="mt-3 text-center">
+              <small class="text-muted">
+                <i class="bi bi-shield-check me-1"></i>
+                Secure 256-bit SSL encryption
+              </small>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    // Parent Component: App
+    const App = {
+      components: {
+        CheckoutForm,
+        CartSummary
+      },
+      setup() {
+        const cartItems = ref([]);
+        const cartTotal = ref(0);
+        const shippingCost = ref(0);
+        const orderHistory = ref([]);
+
+        // Load cart data from localStorage
+        const loadCartData = () => {
+          const savedCart = localStorage.getItem('cart');
+          if (savedCart) {
+            cartItems.value = JSON.parse(savedCart);
+            calculateCartTotal();
+          }
+        };
+
+        // Calculate cart total
+        const calculateCartTotal = () => {
+          cartTotal.value = cartItems.value.reduce((total, item) => {
+            return total + (item.price * item.quantity);
+          }, 0);
+        };
+
+        // Handle shipping method change
+        const handleShippingChange = (cost) => {
+          shippingCost.value = cost;
+        };
+
+        // Handle order placement
+        const handleOrderPlaced = (orderData) => {
+          orderHistory.value.push(orderData);
+          localStorage.setItem('orderHistory', JSON.stringify(orderHistory.value));
+          
+          // Clear cart
+          cartItems.value = [];
+          cartTotal.value = 0;
+          localStorage.removeItem('cart');
+        };
+
+        // Load data on component mount
+        onMounted(() => {
+          loadCartData();
+          
+          // Load order history
+          const savedOrders = localStorage.getItem('orderHistory');
+          if (savedOrders) {
+            orderHistory.value = JSON.parse(savedOrders);
+          }
+        });
+
+        return {
+          cartItems,
+          cartTotal,
+          shippingCost,
+          orderHistory,
+          handleShippingChange,
+          handleOrderPlaced
+        };
+      },
+      template: `
+        <main class="container py-5">
+          <div class="checkout-container">
+            <!-- Page Header -->
+            <div class="page-header">
+              <h1><i class="bi bi-shield-check me-3"></i>Secure Checkout</h1>
+              <p>Complete your order safely and securely</p>
+            </div>
+            
+            <div class="row g-4">
+              <!-- Left Column: Checkout Form -->
+              <div class="col-lg-8">
+                <CheckoutForm 
+                  :cart-items="cartItems"
+                  :cart-total="cartTotal"
+                  :shipping-cost="shippingCost"
+                  @shipping-changed="handleShippingChange"
+                  @order-placed="handleOrderPlaced"
+                />
+              </div>
+              
+              <!-- Right Column: Cart Summary -->
+              <div class="col-lg-4">
+                <CartSummary 
+                  :cart-items="cartItems"
+                  :cart-total="cartTotal"
+                  :shipping-cost="shippingCost"
+                />
+              </div>
+            </div>
+          </div>
+        </main>
+      `
+    };
+
+    // Mount the Vue application
+    createApp(App).mount('#app');
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
+  
+  <style>
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </body>
 </html>

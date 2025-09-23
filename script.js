@@ -152,7 +152,7 @@ function renderProductCard(prod) {
   return `
     <div class="col-md-6 col-lg-3 product" data-name="${prod.name}">
       <div class="card card-tech h-100 fade-in">
-        <img src="${prod.image || 'images/default.jpg'}" class="card-img-top" alt="${prod.name}">
+        <img src="${prod.image || 'images/default.svg'}" class="card-img-top" alt="${prod.name}" onerror="this.src='images/default.svg'">
         <div class="card-body">
           <h5 class="card-title">${prod.name}</h5>
           <p class="card-text text-muted">${prod.description || ''}</p>
@@ -211,7 +211,7 @@ function renderFeaturedDeal(product) {
   container.innerHTML = `
     <div class="position-relative">
       <span class="badge bg-primary position-absolute top-0 end-0 m-2" style="z-index: 10;">-${discountPercent}%</span>
-      <img src="${product.image || 'images/default.jpg'}" class="img-fluid rounded mb-3" alt="${product.name}" style="max-height: 200px; width: 100%; object-fit: cover;">
+      <img src="${product.image || 'images/default.svg'}" class="img-fluid rounded mb-3" alt="${product.name}" style="max-height: 200px; width: 100%; object-fit: cover;" onerror="this.src='images/default.svg'">
       <div class="text-center">
         <h5>${product.name}</h5>
         <p class="text-muted small">${product.description || ''}</p>
@@ -291,7 +291,7 @@ function renderFeaturedProductsCarousel(containerId, limit = 8) {
                 <div class="${getColClass()} product" data-name="${prod.name}">
                   <div class="card card-tech h-100 fade-in position-relative">
                     ${discountBadge}
-                    <img src="${prod.image || 'images/default.jpg'}" class="card-img-top" alt="${prod.name}">
+                    <img src="${prod.image || 'images/default.svg'}" class="card-img-top" alt="${prod.name}" onerror="this.src='images/default.svg'">
                     <div class="card-body d-flex flex-column">
                       <h5 class="card-title">${prod.name}</h5>
                       <p class="card-text text-muted flex-grow-1">${prod.description || ''}</p>

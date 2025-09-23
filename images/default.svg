@@ -1,0 +1,7 @@
+<!-- Default Product Image Placeholder -->
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="400" fill="#2a2a2a"/>
+  <text x="200" y="180" font-family="Arial, sans-serif" font-size="24" fill="#00ffcc" text-anchor="middle">TechOps</text>
+  <text x="200" y="220" font-family="Arial, sans-serif" font-size="16" fill="#cccccc" text-anchor="middle">Product Image</text>
+  <text x="200" y="250" font-family="Arial, sans-serif" font-size="16" fill="#cccccc" text-anchor="middle">Coming Soon</text>
+</svg>

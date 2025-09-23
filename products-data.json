@@ -21,10 +21,10 @@
     "category": "Peripherals"
   },
   {
-    "name": "Logitech G Pro X Superlight Mouse",
+    "name": "Logitech G Pro X Superlight 2 Mouse",
     "price": 149.99,
     "description": "Ultra-light wireless gaming mouse with HERO sensor for maximum precision.",
-    "image": "images/logitech-gpro-x.jpg",
+    "image": "images/logitech-gpro2-x.jpg",
     "category": "Peripherals"
   },
   {
@@ -35,10 +35,10 @@
     "category": "Components"
   },
   {
-    "name": "NVIDIA GeForce RTX 4090",
+    "name": "ASUS ROG Strix NVIDIA GeForce RTX 4090",
     "price": 1599.99,
     "description": "The most powerful gaming GPU for 4K and ray tracing.",
-    "image": "images/nvidia-rtx-4090.jpg",
+    "image": "images/asus-nvidia-rtx-4090.jpg",
     "category": "Components"
   },
   {
