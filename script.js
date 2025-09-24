@@ -937,6 +937,25 @@ function updateCheckoutTotal() {
 }
 
 // ======================
+// CART MODAL FOCUS MANAGEMENT
+// ======================
+function setupCartModalEvents() {
+  const cartModal = document.getElementById('cartModal');
+  if (cartModal) {
+    // Remove focus from cart button when modal closes
+    cartModal.addEventListener('hidden.bs.modal', function () {
+      // Find all cart buttons and remove focus
+      const cartButtons = document.querySelectorAll('button[onclick="showCart()"]');
+      cartButtons.forEach(button => {
+        button.blur();
+        // Remove any focus-visible class if present
+        button.classList.remove('focus-visible');
+      });
+    });
+  }
+}
+
+// ======================
 // INITIALIZATION
 // ======================
 function initializePage() {
@@ -953,6 +972,9 @@ function initializePage() {
   
   // Set up checkout
   setupCheckout();
+  
+  // Set up cart modal focus management
+  setupCartModalEvents();
   
   // Handle products page search parameters
   if (window.location.pathname.endsWith('products.html')) {

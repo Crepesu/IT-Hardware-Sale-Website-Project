@@ -472,29 +472,29 @@ const ContactApp = {
   template: `
     <div>
       <!-- Navigation -->
-      <nav class="navbar navbar-expand-lg navbar-light py-3" style="background: linear-gradient(135deg, #ffffff, #f8f9fa); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(0, 102, 204, 0.1);">
+      <nav class="navbar navbar-expand-lg navbar-light py-3 standard-navbar">
         <div class="container d-flex align-items-center">
           <!-- Toggler moved before brand for consistency across pages -->
           <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <a class="navbar-brand fw-bold" href="index.html" style="color: #0066cc; font-size: 1.5rem; text-decoration: none;">TechOps</a>
+          <a class="navbar-brand fw-bold navbar-brand-standard" href="index.html">TechOps</a>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item"><a class="nav-link" href="index.html" style="color: #333333; font-weight: 500;">Home</a></li>
-              <li class="nav-item"><a class="nav-link" href="products.html" style="color: #333333; font-weight: 500;">Products</a></li>
-              <li class="nav-item"><a class="nav-link active" href="contact.html" style="color: #0066cc; font-weight: 600; border-bottom: 2px solid #0066cc;">Contact Us</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-standard" href="index.html">Home</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-standard" href="products.html">Products</a></li>
+              <li class="nav-item"><a class="nav-link nav-link-active" href="contact.html">Contact Us</a></li>
             </ul>
           </div>
           <!-- Always-visible actions -->
           <div class="d-flex align-items-center ms-auto flex-grow-1 flex-lg-grow-0 gap-2 flex-wrap navbar-actions">
-            <button class="btn" type="button" onclick="showCart()" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem; font-weight: 500;">
+            <button class="btn btn-gradient" type="button" onclick="showCart()">
               <i class="bi bi-cart"></i> Cart
             </button>
             <form id="searchFormContact" class="d-flex w-100" role="search" style="min-width:220px;">
-              <input id="searchInputContact" class="form-control me-2" type="search" placeholder="Search products…" aria-label="Search" style="flex:1 1 auto; max-width:none; border: 2px solid #e0e0e0; border-radius: 0.5rem;">
-              <button class="btn" type="submit" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem;"><i class="bi bi-search"></i></button>
+              <input id="searchInputContact" class="form-control me-2 search-input-standard" type="search" placeholder="Search products…" aria-label="Search">
+              <button class="btn btn-gradient" type="submit"><i class="bi bi-search"></i></button>
             </form>
           </div>
         </div>

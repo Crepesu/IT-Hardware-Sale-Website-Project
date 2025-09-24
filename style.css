@@ -5,9 +5,6 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Utility: ensure consistent gap when toggler precedes brand */
-.navbar .navbar-toggler.me-2 { margin-right: 0.75rem !important; }
-
 /* --- Custom backgrounds and borders --- */
 .bg-darktech { background-color: #ffffff !important; border-bottom: 1px solid #e9ecef; }
 .bg-darktech-2 { background-color: #ffffff !important; border: 1px solid #dee2e6; }
@@ -85,6 +82,43 @@ body {
   text-decoration: underline; 
   color: #0056b3;
 }
+
+/* Reusable gradient button for cart/search etc */
+.btn-gradient {
+  background: linear-gradient(135deg, #0066cc, #2563eb) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 0.55rem !important;
+  font-weight: 500 !important;
+  padding: 0.55rem 1.1rem !important;
+  line-height: 1.2 !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: .4rem;
+  box-shadow: 0 4px 10px -2px rgba(0,102,204,.35);
+  transition: background .25s, transform .25s, box-shadow .25s;
+}
+.btn-gradient:hover {
+  background: linear-gradient(135deg, #0a74d8, #1d4ed8) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -4px rgba(0,102,204,.45);
+  color:#fff !important;
+}
+.btn-gradient:focus {
+  background: linear-gradient(135deg, #0a74d8, #1d4ed8) !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+  color:#fff !important;
+  outline: none;
+}
+.btn-gradient:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px -2px rgba(0,102,204,.4);
+}
+/* Remove persistent focus after click */
+.btn-gradient:focus:not(:focus-visible) {
+  box-shadow: 0 4px 10px -2px rgba(0,102,204,.35);
+}
+.btn-gradient i { font-size: 1rem; }
 
 /* --- Layout helpers --- */
 .section-py { padding-top: 4rem; padding-bottom: 4rem; }
@@ -243,7 +277,41 @@ body.has-sidebar {
   }
 }
 
-/* --- Navbar improvements --- */
+/* --- Standardized Navbar Classes --- */
+.standard-navbar {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa) !important;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid rgba(0, 102, 204, 0.1) !important;
+  position: sticky;
+}
+
+.navbar-brand-standard {
+  color: #0066cc !important;
+  font-size: 1.5rem !important;
+  text-decoration: none !important;
+  font-weight: bold !important;
+}
+
+.nav-link-standard {
+  color: #333333 !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+}
+
+.nav-link-active {
+  color: #0066cc !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid #0066cc !important;
+}
+
+.search-input-standard {
+  flex: 1 1 auto !important;
+  max-width: none !important;
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 0.5rem !important;
+}
+
+/* --- Legacy navbar improvements --- */
 .navbar-light {
   background-color: #ffffff !important;
   border-bottom: 1px solid #dee2e6;
@@ -276,26 +344,29 @@ body.has-sidebar {
   }
   
   .navbar-brand {
-    font-size: 1.8rem !important;
-    margin-right: 2rem;
+    font-size: 1.6rem !important;
+    margin-right: 1.5rem;
   }
   
   /* Keep cart + search on a single line at tablet width */
   .navbar-actions {
     flex-wrap: nowrap !important;
-    gap: 0.75rem !important;
+    gap: 0.5rem !important;
     margin-top: 0 !important;
     width: auto !important;
   }
-  .navbar-actions form { flex: 1 1 360px !important; max-width: 420px; }
-  .navbar-actions input { padding: .65rem 1rem !important; font-size: .95rem; }
-  .navbar-actions .btn { padding: .65rem 1.25rem !important; font-size: .95rem; min-width:110px; }
-  /* Slightly larger brand but less vertical space */
-  .navbar .navbar-brand { font-size: 1.6rem !important; }
+  .navbar-actions form { flex: 1 1 280px !important; max-width: 360px; }
+  .navbar-actions input { padding: .6rem .9rem !important; font-size: .9rem; }
+  .navbar-actions .btn-gradient { padding: .6rem 1rem !important; font-size: .9rem; min-width: 90px; }
+  .navbar-actions .btn-gradient i { font-size: .85rem; }
 }
 
-/* Collapse tweaks for smaller screens */
+/* Enhanced mobile navbar layout */
 @media (max-width: 767.98px) {
+  .navbar {
+    padding: 1rem 0 !important;
+  }
+  
   .navbar .navbar-collapse {
     background: #ffffff;
     border-radius: 0.5rem;
@@ -303,8 +374,49 @@ body.has-sidebar {
     margin-top: 0.75rem;
   }
   
-  .navbar .ms-auto.flex-grow-1 {
-    margin-top: 0.75rem;
+  .navbar-brand {
+    font-size: 1.4rem !important;
+  }
+  
+  .navbar-actions {
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+    margin-top: 0.5rem !important;
+  }
+  
+  .navbar-actions .btn-gradient {
+    padding: .55rem .8rem !important;
+    font-size: .85rem !important;
+    min-width: 70px;
+  }
+  
+  .navbar-actions form {
+    flex: 1 1 200px !important;
+    min-width: 180px;
+  }
+  
+  .navbar-actions input {
+    padding: .55rem .8rem !important;
+    font-size: .85rem !important;
+  }
+}
+
+/* Extra small mobile refinements */
+@media (max-width: 575.98px) {
+  .navbar-actions {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+  
+  .navbar-actions .btn-gradient,
+  .navbar-actions form {
+    width: 100% !important;
+    min-width: unset !important;
+  }
+  
+  .navbar-actions .btn-gradient {
+    justify-content: center;
   }
 }
 
