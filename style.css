@@ -408,21 +408,21 @@ body.has-sidebar {
   }
   
   .navbar-actions .btn-gradient {
-    padding: .55rem .8rem !important;
-    font-size: .85rem !important;
-    min-width: 60px;
+    padding: .5rem .7rem !important;
+    font-size: .8rem !important;
+    min-width: 50px;
     flex-shrink: 0;
   }
   
   .navbar-actions form {
-    flex: 1 1 120px !important;
-    min-width: 120px;
-    max-width: 200px;
+    flex: 1 1 80px !important;
+    min-width: 80px;
+    max-width: 150px;
   }
   
   .navbar-actions input {
-    padding: .55rem .6rem !important;
-    font-size: .85rem !important;
+    padding: .5rem .5rem !important;
+    font-size: .8rem !important;
   }
 }
 
@@ -446,7 +446,7 @@ body.has-sidebar {
 
 /* Let the search bar grow while buttons shrink slightly */
 .navbar form[role="search"] input[type="search"] {
-  min-width: 100px;
+  min-width: 80px;
 }
 .navbar .btn {
   white-space: nowrap;
@@ -676,14 +676,14 @@ section:nth-child(even) {
     width: 100% !important;
     min-width: 0 !important;
     flex: 1 !important;
-    padding: 0.5rem 0.6rem !important;
-    font-size: 0.85rem !important;
+    padding: 0.4rem 0.5rem !important;
+    font-size: 0.8rem !important;
   }
   
   .navbar form[role="search"] .btn {
     width: auto !important;
     flex-shrink: 0 !important;
-    padding: 0.5rem 0.6rem !important;
+    padding: 0.4rem 0.5rem !important;
   }
   
   /* Forms prevent zoom */
