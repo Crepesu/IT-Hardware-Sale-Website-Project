@@ -63,17 +63,37 @@ Recommended quick ways to serve locally:
 
 ---
 
-## File structure (important files)
+## File structure (key files & purpose)
 
-- `index.html` — Home page with featured deal and sidebar navigation
-- `products.html` — Full product listing with category filter and search
-- `contact.html` — Contact form page (client-side only)
-- `checkout.html` — Checkout and order confirmation simulation
-- `products-data.json` — JSON array of product objects (name, price, description, image, category)
-- `style.css` — Project styles and layout tweaks (overrides and theme)
-- `script.js` — All front-end JS: product loading, search, cart, checkout, validation, UI handlers
-- `CHANGES.md` — Change log and recent notes
-- `.vscode/settings.json` — Live Server port example (optional)
+Top-level (simplified):
+
+```
+IT-Hardware-Sale-Website-Project/
+├─ index.html              # Home (hero, featured deal, carousel, map, sidebar)
+├─ products.html           # Product catalogue + filtering + search binding
+├─ contact.html            # Contact form (Vue-powered) page
+├─ checkout.html           # Checkout flow (Vue-powered) page
+├─ products-data.json      # Product seed data (name, price, description, image, category)
+├─ script.js               # Shared logic: cart, product loading, search redirect, featured deal
+├─ checkout-app.js         # Vue 3 SPA logic for checkout (form validation, totals, shipping)
+├─ contact-app.js          # Vue 3 logic for contact form (validation + dynamic selects)
+├─ style.css               # Theme, layout, utilities, components (navbar, buttons, carousel)
+├─ CHANGES.md              # Human-readable change log
+├─ README.md               # Project documentation
+├─ images/                 # Product & UI images (referenced by products-data.json)
+└─ .vscode/ (optional)     # Editor settings (e.g. live server port)
+```
+
+Notable patterns:
+- No build step: all files are static assets.
+- Vue is loaded via CDN inside pages needing it (`contact.html`, `checkout.html`).
+- Reusable CSS variables in `:root` (colors, radii) support quick theming.
+- Carousel uses custom external nav buttons (`.carousel-nav-btn`).
+
+LocalStorage keys:
+- `cart` — JSON array of cart line items.
+
+Add/remove/rename files freely (no bundler references). Just keep image paths consistent with `products-data.json`.
 
 ---
 
@@ -128,6 +148,12 @@ To add or edit products, update `products-data.json` and add the referenced imag
 
 ## Known limitations
 
+Additional current gaps:
+- No ARIA live messaging for carousel slide changes.
+- No persistence beyond `localStorage` (clears per browser/profile).
+- No image lazy loading or compression strategy yet.
+- Validation logic duplicated (plain JS + Vue variants) — could centralize.
+
 - No back-end: all data and state live in the browser (localStorage / JSON file).
 - Contact form and payment are simulated — no emails or transactions are sent.
 - Images must be added to `images/` and referenced in `products-data.json` manually.
@@ -154,6 +180,19 @@ See `CHANGES.md` for the latest set of UI/UX and behavioral changes (latest entr
 
 - Bootstrap (CSS framework) — https://getbootstrap.com/
 - Bootstrap Icons — https://icons.getbootstrap.com/
-- This project currently does not include a LICENSE file.
+- This project currently does not include a LICENSE file. For reuse add one (MIT recommended for educational demos).
+
+---
+
+## Future enhancement ideas (roadmap excerpt)
+
+- Accessibility: ARIA live regions for carousel, focus trap improvements, higher contrast optional theme.
+- Performance: Lazy load images, preload hero asset, compress JPEG/PNG, define image width/height to reduce CLS.
+- UX: Wishlist, recently viewed, quick add overlay, keyboard shortcut `/` to focus search.
+- Data: Replace static JSON with simple read-only API or mock service worker.
+- Testing: Add minimal Playwright smoke tests (load pages, add to cart, complete checkout simulation).
+- Deployment: Host on GitHub Pages or Netlify; add sitemap + basic meta tags for social sharing.
+
+---
 
 ---
