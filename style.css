@@ -5,11 +5,53 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Utility: ensure consistent gap when toggler precedes brand */
+.navbar .navbar-toggler.me-2 { margin-right: 0.75rem !important; }
+
 /* --- Custom backgrounds and borders --- */
 .bg-darktech { background-color: #ffffff !important; border-bottom: 1px solid #e9ecef; }
 .bg-darktech-2 { background-color: #ffffff !important; border: 1px solid #dee2e6; }
 .border-neon { border-color: #0066cc !important; }
 .border-neon-subtle { border-color: rgba(0, 102, 204, 0.3) !important; }
+
+/* (Removed malformed early .btn-neon block that swallowed media queries) */
+
+/* Tablet-specific product grid (768px - 1199px) */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  .col-lg-4, .col-xl-3 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+  .card-tech { margin-bottom: 2rem; }
+  .card-tech .card-body { padding: 1.5rem; }
+  .card-tech .card-title { font-size: 1.1rem; margin-bottom: 1rem; }
+  .card-tech .btn { padding: 0.75rem 1.25rem; font-size: 0.95rem; }
+}
+
+/* Small tablet and large mobile adjustments */
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  
+  .container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* 1 card per row on phones */
+  .col-sm-6, .col-md-6, .col-lg-4, .col-xl-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
 
 /* --- Buttons and links --- */
 .btn-neon { 
@@ -222,17 +264,47 @@ body.has-sidebar {
   color: #0066cc !important;
 }
 
-/* Collapse tweaks */
-@media (max-width: 991.98px) {
+/* Tablet-specific navbar improvements */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .navbar {
+    padding: 1.5rem 0 !important;
+  }
+  
+  .navbar .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  .navbar-brand {
+    font-size: 1.8rem !important;
+    margin-right: 2rem;
+  }
+  
+  /* Keep cart + search on a single line at tablet width */
+  .navbar-actions {
+    flex-wrap: nowrap !important;
+    gap: 0.75rem !important;
+    margin-top: 0 !important;
+    width: auto !important;
+  }
+  .navbar-actions form { flex: 1 1 360px !important; max-width: 420px; }
+  .navbar-actions input { padding: .65rem 1rem !important; font-size: .95rem; }
+  .navbar-actions .btn { padding: .65rem 1.25rem !important; font-size: .95rem; min-width:110px; }
+  /* Slightly larger brand but less vertical space */
+  .navbar .navbar-brand { font-size: 1.6rem !important; }
+}
+
+/* Collapse tweaks for smaller screens */
+@media (max-width: 767.98px) {
   .navbar .navbar-collapse {
     background: #ffffff;
     border-radius: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
   }
-  /* Space actions and allow wrapping under brand */
+  
   .navbar .ms-auto.flex-grow-1 {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
   }
 }
 
@@ -327,10 +399,6 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.4em 0.8em;
   border-radius: 0.5rem;
 }
-.badge.bg-darktech {
-  background-color: #6c757d !important;
-  color: #ffffff;
-}
 
 /* --- Footer improvements --- */
 footer {
@@ -354,10 +422,8 @@ footer {
   transition: all 0.2s ease-in-out;
 }
 
-/* --- Product category badges with better colors --- */
-.badge.bg-darktech {
-  background-color: #28a745 !important;
-}
+/* --- Product category badge color (single source) --- */
+.badge.bg-darktech { background-color: #28a745 !important; color:#fff; }
 
 /* --- Price highlighting --- */
 .price {
@@ -368,6 +434,12 @@ footer {
   font-size: 1.2em;
   font-weight: 700;
 }
+
+/* Sale / discount styling */
+.price-original { font-size: 0.85rem; color: #6c757d; text-decoration: line-through; }
+.price-new { font-size: 1.1rem; font-weight: 700; color: #198754; }
+.price-savings { font-size: 0.75rem; color: #0d6efd; font-weight: 600; }
+.sale-badge { background: #dc3545 !important; }
 
 /* --- Add some visual interest to sections --- */
 section {
@@ -538,21 +610,25 @@ section:nth-child(even) {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
   
-  /* Force navbar actions to stack */
-  .navbar-actions {
-    flex-direction: column !important;
-    gap: 0.75rem;
-    width: 100%;
+  /* Only stack below 768px; leave tablet (>=768) horizontal */
+  @media (max-width: 767.98px) {
+    .navbar-actions { flex-direction: column !important; gap: .75rem; width:100%; }
+    .navbar-actions .btn { width:100%; }
+    .navbar-actions form { width:100%; }
   }
-  
-  .navbar-actions .btn { 
-    flex: 0 0 auto; 
-    width: 100%;
-  }
-  .navbar-actions form { 
-    flex: 1 1 100%; 
-    width: 100%;
-  }
+}
+
+/* Tablet filter bar improvements */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .filter-btn { margin-bottom: .5rem !important; }
+  .mb-4 > .filter-btn:first-child { margin-left:0; }
+  .mb-4 { display:flex; flex-wrap:wrap; gap:.5rem .75rem; }
+}
+
+/* Reduce extra vertical space above products on tablet */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  main.container { padding-top: 2.5rem !important; }
+  main.container h2 { margin-bottom: 1.5rem !important; }
 }
 
 /* ADD these improved card responsive rules: */
@@ -825,4 +901,132 @@ section:nth-child(even) {
 
 .modal-body-styled {
   color: #333333;
+}
+
+/* =====================================================
+   TABLET-SPECIFIC IMPROVEMENTS (768px - 1199px)
+===================================================== */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  
+  /* Main content spacing */
+  main.container {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+  
+  /* Page headers */
+  h1, h2 {
+    font-size: 2.25rem !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  /* Filter buttons */
+  .filter-btn {
+    padding: 0.75rem 1.5rem !important;
+    margin-bottom: 1rem !important;
+    font-size: 1rem !important;
+    min-width: 120px;
+  }
+  
+  /* Form improvements */
+  .form-control, .form-select {
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .form-label {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  /* Button spacing */
+  .btn {
+    padding: 0.75rem 2rem !important;
+    font-size: 1rem !important;
+    margin-bottom: 1rem;
+  }
+  
+  /* Card modal improvements */
+  .modal-dialog {
+    max-width: 600px !important;
+    margin: 2rem auto !important;
+  }
+  
+  .modal-content {
+    padding: 1.5rem !important;
+  }
+  
+  .modal-body {
+    padding: 2rem !important;
+    font-size: 1rem !important;
+  }
+  
+  /* Cart items spacing */
+  .cart-item {
+    padding: 1.5rem 0 !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Footer spacing */
+  footer {
+    padding: 3rem 0 !important;
+    font-size: 1rem !important;
+  }
+  
+  footer .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  
+  /* Sidebar improvements */
+  .sidebar {
+    padding: 2rem !important;
+  }
+  
+  .sidebar-link {
+    padding: 1rem 1.5rem !important;
+    font-size: 1rem !important;
+  }
+  
+  /* Featured sections */
+  .section-py {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
+  
+  /* Search input improvements */
+  input[type="search"] {
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+  }
+  
+  /* Carousel improvements for tablets */
+  .carousel-item .row {
+    margin: 0 -1rem;
+  }
+  
+  .carousel-item .col-lg-3 {
+    padding: 0 1rem;
+  }
+  
+  /* Contact form spacing */
+  .contact-form .row {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Checkout form improvements */
+  .checkout-container {
+    padding: 2rem !important;
+  }
+  
+  .form-section {
+    padding: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
+  
+  .cart-summary {
+    padding: 2rem !important;
+  }
 }

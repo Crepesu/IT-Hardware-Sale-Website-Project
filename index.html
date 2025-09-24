@@ -1,79 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Meta tags for responsive design and character encoding -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TechOps — Computers & Tech</title>
+  
+  <!-- External CSS frameworks and icon libraries -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom stylesheet for TechOps branding and theme -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="has-sidebar">
-  <!-- Navbar -->
-  <!-- Vertical sidebar nav (in-page sections) -->
+  
+  <!-- ============================================ -->
+  <!-- SIDEBAR NAVIGATION (In-page sections)        -->
+  <!-- ============================================ -->
+  <!-- Fixed vertical sidebar for navigating between page sections -->
   <nav class="sidebar-nav position-fixed top-0 start-0 vh-100 d-flex flex-column justify-content-center align-items-center" role="navigation" aria-label="Main navigation">
+    <!-- Brand logo with neon effect styling -->
     <a href="#home" class="sidebar-logo mb-3 fw-bold text-neon text-decoration-none" aria-label="TechOps home">
       <i class="bi bi-cpu"></i>
       <span class="sidebar-logo-text ms-1">TechOps</span>
     </a>
-    <ul class="sidebar-links list-unstyled d-flex flex-column align-items-center w-100" role="menubar">
-      <li role="none">
-        <a href="#home" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none active" role="menuitem" aria-current="page">
+    
+    <!-- Navigation menu for page sections -->
+    <ul class="sidebar-links list-unstyled d-flex flex-column align-items-center w-100">
+      <!-- Home section link - marked as active by default -->
+      <li>
+        <a href="#home" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none active" aria-current="page">
           <i class="bi bi-house-door me-2" aria-hidden="true"></i>
           <span>Home</span>
         </a>
       </li>
-      <li role="none">
-        <a href="#products" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none" role="menuitem">
+      <!-- Products section link -->
+      <li>
+        <a href="#products" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none">
           <i class="bi bi-box-seam me-2" aria-hidden="true"></i>
           <span>Products</span>
         </a>
       </li>
-      <li role="none">
-        <a href="#contact" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none" role="menuitem">
+      <!-- Contact section link -->
+      <li>
+        <a href="#contact" class="sidebar-link mb-2 d-flex align-items-center text-white text-decoration-none">
           <i class="bi bi-envelope me-2" aria-hidden="true"></i>
           <span>Contact</span>
         </a>
       </li>
     </ul>
+    <!-- Decorative glow effect element -->
     <div class="sidebar-glow"></div>
   </nav>
 
-  <!-- Top navbar (page switching) -->
-  <nav class="navbar navbar-expand-lg navbar-light py-3" style="background: linear-gradient(135deg, #ffffff, #f8f9fa); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(0, 102, 204, 0.1);">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html" style="color: #0066cc; font-size: 1.5rem; text-decoration: none;">TechOps</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <!-- ============================================ -->
+  <!-- TOP NAVIGATION BAR (Page switching)          -->
+  <!-- ============================================ -->
+  <!-- Horizontal navbar for navigating between different pages -->
+  <nav class="navbar navbar-expand-lg navbar-light py-3 standard-navbar" aria-label="Main navigation">
+    <div class="container d-flex align-items-center">
+      <!-- Mobile menu toggle button (moved before brand for consistency) -->
+      <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
-      </button> 
+      </button>
+      <!-- Main brand logo -->
+      <a class="navbar-brand fw-bold" href="index.html" style="color: #0066cc; font-size: 1.5rem; text-decoration: none;">TechOps</a>
+      
+      <!-- Collapsible navigation menu -->
       <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Main navigation links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!-- Current page (Home) - highlighted with active styling -->
           <li class="nav-item"><a class="nav-link active" href="index.html" style="color: #0066cc; font-weight: 600; border-bottom: 2px solid #0066cc;">Home</a></li>
+          <!-- Products page link -->
           <li class="nav-item"><a class="nav-link" href="products.html" style="color: #333333; font-weight: 500;">Products</a></li>
+          <!-- Contact page link -->
           <li class="nav-item"><a class="nav-link" href="contact.html" style="color: #333333; font-weight: 500;">Contact Us</a></li>
+          <!-- Checkout page link -->
+          <li class="nav-item"><a class="nav-link" href="checkout.html" style="color: #333333; font-weight: 500;">Checkout</a></li>
         </ul>
       </div>
-      <!-- Always-visible actions -->
+      
+      <!-- ============================================ -->
+      <!-- NAVBAR ACTIONS (Cart & Search)              -->
+      <!-- ============================================ -->
+      <!-- Always-visible cart and search functionality -->
       <div class="d-flex align-items-center ms-auto flex-grow-1 flex-lg-grow-0 gap-2 flex-wrap navbar-actions">
-        <button class="btn" type="button" onclick="showCart()" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem; font-weight: 500;">
+        <!-- Shopping cart button - opens cart modal -->
+        <button class="btn gradient-button" type="button" onclick="showCart()">
           <i class="bi bi-cart"></i> Cart
         </button>
+        
+        <!-- Product search form - redirects to products page with query -->
         <form id="searchForm" class="d-flex w-100" role="search" style="min-width: 220px;">
           <input id="searchInput" class="form-control me-2" type="search" placeholder="Search products…" aria-label="Search" style="flex:1 1 auto; max-width:none; border: 2px solid #e0e0e0; border-radius: 0.5rem;">
-          <button class="btn" type="submit" style="background: linear-gradient(135deg, #0066cc, #0080ff); color: white; border: none; border-radius: 0.5rem; padding: 0.5rem 1rem;"><i class="bi bi-search"></i></button>
+          <button class="btn gradient-button" type="submit"><i class="bi bi-search"></i></button>
         </form>
       </div>
     </div>
   </nav>
-  <!-- Cart Modal -->
+  
+  <!-- ============================================ -->
+  <!-- SHOPPING CART MODAL                         -->
+  <!-- ============================================ -->
+  <!-- Bootstrap modal for displaying cart contents -->
   <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content" style="background: white; border: 1px solid #e0e0e0; border-radius: 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);">
+        <!-- Modal header with title and close button -->
         <div class="modal-header" style="background: linear-gradient(135deg, #f8f9fa, #ffffff); border-bottom: 1px solid #e0e0e0; border-radius: 1rem 1rem 0 0;">
           <h5 class="modal-title" id="cartModalLabel" style="color: #333333; font-weight: 600;">Cart</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <!-- Modal body - populated dynamically by JavaScript -->
         <div class="modal-body" id="cart-modal-body" style="color: #333333;"></div>
       </div>
     </div>
@@ -108,24 +147,26 @@
         </div>
         
         <!-- Carousel for Featured Products -->
-        <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner" id="featured-products-carousel">
-            <!-- Products will be loaded here -->
-          </div>
-          
-          <!-- Carousel controls -->
-          <button class="carousel-control-prev" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="prev">
+        <div class="position-relative">
+          <!-- External carousel controls -->
+          <button class="carousel-control-external carousel-control-external-prev" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
           </button>
-          <button class="carousel-control-next" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="next">
+          <button class="carousel-control-external carousel-control-external-next" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
           </button>
           
-          <!-- Carousel indicators -->
-          <div class="carousel-indicators" id="carousel-indicators">
-            <!-- Indicators will be added dynamically -->
+          <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner" id="featured-products-carousel">
+              <!-- Products will be loaded here -->
+            </div>
+            
+            <!-- Carousel indicators -->
+            <div class="carousel-indicators" id="carousel-indicators">
+              <!-- Indicators will be added dynamically -->
+            </div>
           </div>
         </div>
         
@@ -212,10 +253,7 @@
                 </p>
               </div>
               
-              <div class="ratio ratio-16x9 rounded-3 overflow-hidden border border-neon-subtle">
-                <iframe 
-                  title="TechOps Store Location Map" 
-                  src="https://maps.google.com/maps?q=Melbourne%20CBD&t=&z=13&ie=UTF8&iwloc=&output=embed"
+.com/maps?q=Melbourne%20CBD&t=&z=13&ie=UTF8&iwloc=&output=embed"
                   loading="lazy">
                 </iframe>
               </div>
@@ -225,15 +263,17 @@
       </div>
     </section>
   </main>
-  <!-- Footer -->
-  <footer class="py-5 mt-5" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); color: #495057; text-align: center; border-top: 1px solid rgba(0, 102, 204, 0.08); box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.03);">
+  <!-- ============================================ -->
+  <!-- FOOTER                                   -->
+  <!-- ============================================ -->
+  <footer class="py-5 mt-5 standard-footer">
     <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
       <div class="fw-medium">&copy; <span id="year"></span> TechOps — SIT120 Project</div>
       <div class="d-flex gap-4">
-        <a href="index.html" style="color: #0066cc; text-decoration: none; font-weight: 500; transition: color 0.2s ease;" onmouseover="this.style.color='#0080ff'" onmouseout="this.style.color='#0066cc'">Home</a>
-        <a href="products.html" style="color: #0066cc; text-decoration: none; font-weight: 500; transition: color 0.2s ease;" onmouseover="this.style.color='#0080ff'" onmouseout="this.style.color='#0066cc'">Products</a>
-        <a href="contact.html" style="color: #0066cc; text-decoration: none; font-weight: 500; transition: color 0.2s ease;" onmouseover="this.style.color='#0080ff'" onmouseout="this.style.color='#0066cc'">Contact Us</a>
-        <a href="checkout.html" style="color: #0066cc; text-decoration: none; font-weight: 500; transition: color 0.2s ease;" onmouseover="this.style.color='#0080ff'" onmouseout="this.style.color='#0066cc'">Checkout</a>
+        <a href="index.html" class="footer-link">Home</a>
+        <a href="products.html" class="footer-link">Products</a>
+        <a href="contact.html" class="footer-link">Contact Us</a>
+        <a href="checkout.html" class="footer-link">Checkout</a>
       </div>
     </div>
   </footer>

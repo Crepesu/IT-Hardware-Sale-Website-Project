@@ -15,6 +15,13 @@ function saveCartToStorage() {
 }
 
 function addToCart(productName) {
+  // Prevent multiple rapid clicks
+  const btn = document.querySelector(`[data-name="${productName}"]`);
+  if (btn && btn.disabled) return;
+  
+  // Temporarily disable the button
+  if (btn) btn.disabled = true;
+  
   // Check for discounted price
   const discountedBtn = document.querySelector(`[data-name="${productName}"][data-price]`);
   const discountedPrice = discountedBtn ? parseFloat(discountedBtn.getAttribute('data-price')) : null;
@@ -25,6 +32,7 @@ function addToCart(productName) {
       const product = products.find(p => p.name === productName);
       if (!product) {
         alert('Product not found!');
+        if (btn) btn.disabled = false;
         return;
       }
 
@@ -45,8 +53,16 @@ function addToCart(productName) {
       
       saveCartToStorage();
       showAddToCartFeedback(productName, !!discountedBtn);
+      
+      // Re-enable button after feedback
+      setTimeout(() => {
+        if (btn) btn.disabled = false;
+      }, 1600);
     })
-    .catch(err => console.error('Error adding to cart:', err));
+    .catch(err => {
+      console.error('Error adding to cart:', err);
+      if (btn) btn.disabled = false;
+    });
 }
 
 function showAddToCartFeedback(productName, isDiscounted) {
@@ -97,11 +113,20 @@ function showCart() {
     }
     
     return `
-      <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
-        <div>
+      <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+        <div class="flex-grow-1">
           <strong>${item.name}</strong>
-          <div class="small text-muted">Qty: ${item.quantity} × $${item.price.toFixed(2)}</div>
+          <div class="small text-muted">$${item.price.toFixed(2)} each</div>
           ${savingsDisplay}
+          <div class="d-flex align-items-center mt-2">
+            <label class="small text-muted me-2">Qty:</label>
+            <button class="btn btn-outline-secondary btn-sm" onclick="decreaseQuantity('${item.name.replace(/'/g, "\\'")}')" style="padding: 0.2rem 0.5rem;">-</button>
+            <span class="mx-2 fw-bold">${item.quantity}</span>
+            <button class="btn btn-outline-secondary btn-sm" onclick="increaseQuantity('${item.name.replace(/'/g, "\\'")}')" style="padding: 0.2rem 0.5rem;">+</button>
+            <button class="btn btn-outline-danger btn-sm ms-2" onclick="removeFromCart('${item.name.replace(/'/g, "\\'")}')" style="padding: 0.2rem 0.5rem;">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
         </div>
         <div class="text-end">
           <div class="fw-bold">$${itemTotal.toFixed(2)}</div>
@@ -140,6 +165,46 @@ function clearCart() {
   showCart();
 }
 
+function removeFromCart(productName) {
+  cart = cart.filter(item => item.name !== productName);
+  saveCartToStorage();
+  showCart();
+}
+
+function updateCartQuantity(productName, newQuantity) {
+  if (newQuantity <= 0) {
+    removeFromCart(productName);
+    return;
+  }
+  
+  const item = cart.find(item => item.name === productName);
+  if (item) {
+    item.quantity = newQuantity;
+    saveCartToStorage();
+    showCart();
+  }
+}
+
+function increaseQuantity(productName) {
+  const item = cart.find(item => item.name === productName);
+  if (item) {
+    item.quantity += 1;
+    saveCartToStorage();
+    showCart();
+  }
+}
+
+function decreaseQuantity(productName) {
+  const item = cart.find(item => item.name === productName);
+  if (item && item.quantity > 1) {
+    item.quantity -= 1;
+    saveCartToStorage();
+    showCart();
+  } else if (item && item.quantity === 1) {
+    removeFromCart(productName);
+  }
+}
+
 function goToCheckout() {
   saveCartToStorage();
   window.location.href = 'checkout.html';
@@ -148,21 +213,40 @@ function goToCheckout() {
 // ======================
 // PRODUCT RENDERING
 // ======================
-function renderProductCard(prod) {
+function renderProductCard(prod, index=0) {
+  // Determine if product should display a discount (mirror featured logic: apply 20% off first product)
+  const discountPercent = (prod.discountPercent || (index === 0 ? 20 : 0));
+  const hasDiscount = discountPercent > 0;
+  const originalPrice = prod.price || 0;
+  const discountedPrice = hasDiscount ? originalPrice * (1 - discountPercent/100) : originalPrice;
+  const savings = originalPrice - discountedPrice;
+
+  const badgeHTML = hasDiscount ? `<span class="badge sale-badge position-absolute top-0 end-0 m-2">-${discountPercent}%</span>` : '';
+  const priceHTML = hasDiscount ? `
+    <div class="mb-2">
+      <div class="price-original">$${originalPrice.toFixed(2)}</div>
+      <div class="price-new">$${discountedPrice.toFixed(2)}</div>
+      <div class="price-savings">Save $${savings.toFixed(2)}</div>
+    </div>` : `<div class="price mb-2">$${originalPrice.toFixed(2)}</div>`;
+
+  const dataPriceAttr = hasDiscount ? `data-price="${discountedPrice.toFixed(2)}"` : '';
+
   return `
-    <div class="col-md-6 col-lg-3 product" data-name="${prod.name}">
-      <div class="card card-tech h-100 fade-in">
+    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 product" data-name="${prod.name}">
+      <div class="card card-tech h-100 fade-in position-relative">
+        ${badgeHTML}
         <img src="${prod.image || 'images/default.svg'}" class="card-img-top" alt="${prod.name}" onerror="this.src='images/default.svg'">
-        <div class="card-body">
+        <div class="card-body d-flex flex-column">
           <h5 class="card-title">${prod.name}</h5>
-          <p class="card-text text-muted">${prod.description || ''}</p>
-          <div class="price mb-2">$${prod.price ? prod.price.toFixed(2) : 'N/A'}</div>
-          <span class="badge bg-darktech">${prod.category}</span>
-          <button class="btn btn-neon mt-2 add-to-cart-btn" data-name="${prod.name}">Add to Cart</button>
+            <p class="card-text text-muted flex-grow-1">${prod.description || ''}</p>
+            ${priceHTML}
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <span class="badge bg-darktech">${prod.category}</span>
+              <button class="btn btn-neon btn-sm add-to-cart-btn" ${dataPriceAttr} data-name="${prod.name}">Add to Cart</button>
+            </div>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 function renderProducts(containerId, limit = null) {
@@ -173,7 +257,7 @@ function renderProducts(containerId, limit = null) {
       if (limit) products = products.slice(0, limit);
       const container = document.getElementById(containerId);
       if (container) {
-        container.innerHTML = products.map(renderProductCard).join('');
+        container.innerHTML = products.map((p,i)=>renderProductCard(p,i)).join('');
       }
     })
     .catch(err => console.error('Error loading products:', err));
@@ -190,7 +274,7 @@ function filterProducts(category) {
       const container = document.getElementById('products');
       if (container) {
         container.innerHTML = filtered.length
-          ? filtered.map(renderProductCard).join('')
+            ? filtered.map((p, i) => renderProductCard(p, i)).join('')
           : '<div class="col-12"><div class="alert alert-warning">No products found.</div></div>';
       }
     });
@@ -347,9 +431,31 @@ function renderFeaturedProductsCarousel(containerId, limit = 8) {
 // ======================
 // SEARCH FUNCTIONALITY
 // ======================
+
+// Enhanced search function that searches across multiple fields
+function searchProducts(products, searchTerm) {
+  const term = searchTerm.toLowerCase().trim();
+  if (!term) return products;
+  
+  return products.filter(product => {
+    // Search in product name
+    const nameMatch = product.name && product.name.toLowerCase().includes(term);
+    
+    // Search in product description
+    const descriptionMatch = product.description && product.description.toLowerCase().includes(term);
+    
+    // Search in product category
+    const categoryMatch = product.category && product.category.toLowerCase().includes(term);
+    
+    // Return true if any field matches
+    return nameMatch || descriptionMatch || categoryMatch;
+  });
+}
+
 function setupSearch() {
   const searchForm = document.getElementById('searchForm');
   const searchFormProducts = document.getElementById('searchFormProducts');
+  const searchFormContact = document.getElementById('searchFormContact');
   
   if (searchForm) {
     searchForm.addEventListener('submit', function(e) {
@@ -364,18 +470,28 @@ function setupSearch() {
   if (searchFormProducts) {
     searchFormProducts.addEventListener('submit', function(e) {
       e.preventDefault();
-      const term = document.getElementById('searchInputProducts').value.trim().toLowerCase();
+      const term = document.getElementById('searchInputProducts').value.trim();
       fetch('products-data.json')
         .then(res => res.json())
         .then(products => {
-          const filtered = products.filter(p => p.name && p.name.toLowerCase().includes(term));
+          const filtered = searchProducts(products, term);
           const container = document.getElementById('products');
           if (container) {
             container.innerHTML = filtered.length
-              ? filtered.map(renderProductCard).join('')
-              : '<div class="col-12"><div class="alert alert-warning">No products found.</div></div>';
+              ? filtered.map((p,i)=>renderProductCard(p,i)).join('')
+              : '<div class="col-12"><div class="alert alert-warning">No products found matching your search.</div></div>';
           }
         });
+    });
+  }
+
+  if (searchFormContact) {
+    searchFormContact.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const term = document.getElementById('searchInputContact').value.trim();
+      const url = new URL(window.location.origin + '/products.html');
+      if (term) url.searchParams.set('q', term);
+      window.location.href = url.pathname + url.search;
     });
   }
 }
@@ -851,12 +967,12 @@ function initializePage() {
       fetch('products-data.json')
         .then(res => res.json())
         .then(products => {
-          const filtered = products.filter(p => p.name && p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+          const filtered = searchProducts(products, searchQuery);
           const container = document.getElementById('products');
           if (container) {
             container.innerHTML = filtered.length
-              ? filtered.map(renderProductCard).join('')
-              : '<div class="col-12"><div class="alert alert-warning">No products found.</div></div>';
+              ? filtered.map((p,i)=>renderProductCard(p,i)).join('')
+              : '<div class="col-12"><div class="alert alert-warning">No products found matching your search.</div></div>';
           }
         });
     }
@@ -878,11 +994,22 @@ function initializePage() {
     .catch(err => console.error('Error loading featured deal:', err));
   
   // Set up filter buttons
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-    });
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('filter-btn')) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Get category from data attribute
+      const category = e.target.getAttribute('data-category');
+      if (category) {
+        // Update active state
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        // Filter products
+        filterProducts(category);
+      }
+    }
   });
 }
 
@@ -891,8 +1018,12 @@ function initializePage() {
 // ======================
 document.addEventListener('click', function(e) {
   if (e.target.classList.contains('add-to-cart-btn')) {
+    e.preventDefault();
+    e.stopPropagation();
     const productName = e.target.getAttribute('data-name');
-    if (productName) addToCart(productName);
+    if (productName) {
+      addToCart(productName);
+    }
   }
 });
 

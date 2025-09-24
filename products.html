@@ -12,11 +12,11 @@
   <!-- Top navbar for page navigation -->
   <nav class="navbar navbar-expand-lg navbar-light py-3" style="background: linear-gradient(135deg, #ffffff, #f8f9fa); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(0, 102, 204, 0.1);">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html" style="color: #0066cc; font-size: 1.5rem; text-decoration: none;">TechOps</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      <button class="navbar-toggler me-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+      <a class="navbar-brand fw-bold" href="index.html" style="color: #0066cc; font-size: 1.5rem; text-decoration: none;">TechOps</a>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="index.html" style="color: #333333; font-weight: 500;">Home</a></li>
@@ -55,11 +55,11 @@
     <h2 class="mb-4 text-neon">Products</h2>
     <!-- Category filter buttons -->
     <div class="mb-4">
-      <button class="btn btn-outline-neon me-2 mb-2 filter-btn active" onclick="filterProducts('All')">All</button>
-      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" onclick="filterProducts('Laptops')">Laptops</button>
-      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" onclick="filterProducts('Components')">Components</button>
-      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" onclick="filterProducts('Peripherals')">Peripherals</button>
-      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" onclick="filterProducts('Accessories')">Accessories</button>
+      <button class="btn btn-outline-neon me-2 mb-2 filter-btn active" data-category="All">All</button>
+      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" data-category="Laptops">Laptops</button>
+      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" data-category="Components">Components</button>
+      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" data-category="Peripherals">Peripherals</button>
+      <button class="btn btn-outline-neon me-2 mb-2 filter-btn" data-category="Accessories">Accessories</button>
     </div>
     <!-- Product grid -->
     <div id="products" class="row g-4"></div>
