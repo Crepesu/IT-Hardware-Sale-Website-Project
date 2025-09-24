@@ -1,5 +1,42 @@
 TechOps Project — Change Log
 
+Date: 2025-09-24
+
+## Latest Update: UI Consistency, Accessibility Tweaks, Map Fix & Carousel Redesign
+
+### Highlights
+- Standardized navbar structure across all pages (toggler now precedes brand consistently)
+- Introduced reusable gradient button class (`.btn-gradient`) and applied to cart/search actions
+- Refactored and deduplicated CSS (variables, utility classes, removed redundant light theme blocks)
+- Fixed persistent focus highlight on cart button after closing modal (improved accessibility/UX)
+- Iteratively reduced oversized mobile search bar footprint for small screens
+- Repaired broken Google Maps embed on `index.html` (iframe tag reconstruction)
+- Redesigned featured products carousel navigation (new circular side arrows with responsive positioning)
+
+### Files Affected
+- `index.html`: Navbar cleanup, map iframe repaired, carousel arrow markup replaced with custom nav buttons
+- `products.html`, `checkout.html`, `contact.html`: Unified navbar class usage & gradient buttons (earlier step, reaffirmed)
+- `style.css`: Added `.btn-gradient`, standardized navbar classes, CSS variables (`:root`), utility helpers, responsive search input shrink, carousel nav button styles
+- `script.js`: Added modal event listener to remove lingering focus state; preserved cart/search/featured logic
+- `contact-app.js` (if present or prior Vue logic): Navbar alignment and class consistency
+
+### Accessibility / UX
+- Focus style no longer sticks on cart trigger after modal close
+- Larger, clearer carousel navigation targets while respecting reduced motion preference
+- Mobile search control no longer dominates horizontal space
+
+### Technical Refactor
+- Removed duplicate “Standardized Light Theme” CSS block; consolidated into a single set of navbar + utility rules
+- Centralized colors via CSS custom properties (easier future theme adjustments)
+- Introduced wrapper + custom classes for carousel nav to avoid Bootstrap overrides bleeding elsewhere
+
+### Future Opportunity (Newly Noted)
+- Add ARIA live region for carousel slide announcements
+- Keyboard shortcut (e.g. "/" to focus search) for faster product lookup
+- Lazy load product images & implement image dimension attributes for CLS reduction
+
+---
+
 Date: 2025-09-23
 
 ## Latest Update: Checkout Page Complete Redesign & Mobile Optimization

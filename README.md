@@ -21,8 +21,18 @@ This repository contains the TechOps front-end:
 - Checkout page with enhanced form validation and a simulated payment success flow
 - Contact form with realtime validation and demo success alert
 - Clean, reusable components in `style.css` and `script.js`
+- Redesigned carousel navigation (custom circular side arrows with responsive positioning)
 - Accessible-ish markup (aria labels, focus management, keyboard accessible controls)
 - Changelog available in `CHANGES.md`
+
+### Recent Improvements (2025-09-24)
+- Standardized navbar order (toggler before brand) and class-based styling across all pages
+- Introduced reusable `.btn-gradient` (replaced ad-hoc gradient duplicates)
+- Fixed stuck focus state on cart button after closing modal
+- Mobile search bar width + padding reductions (no longer oversized on very small screens)
+- Repaired broken Google Maps embed on `index.html`
+- Carousel arrows redesigned: larger touch area, theme-colored, positioned just outside content on desktop and adjusted for tablet/mobile
+- CSS refactor: variables, utility classes, duplicate light-theme block removed
 
 ---
 
@@ -136,7 +146,7 @@ To add or edit products, update `products-data.json` and add the referenced imag
 
 ## Changelog
 
-See `CHANGES.md` for the latest set of UI/UX and behavioral changes (updated 2025-09-04 in this repo).
+See `CHANGES.md` for the latest set of UI/UX and behavioral changes (latest entry 2025-09-24).
 
 ---
 
