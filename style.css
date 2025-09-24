@@ -1,14 +1,29 @@
+/* --- CSS Variables for consistency --- */
+:root {
+  --primary-color: #0066cc;
+  --primary-hover: #0056b3;
+  --primary-light: rgba(0, 102, 204, 0.1);
+  --primary-border: rgba(0, 102, 204, 0.25);
+  --body-bg: #f8f9fa;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --white: #ffffff;
+  --radius-standard: 0.5rem;
+  --radius-large: 0.75rem;
+}
+
 /* --- Main body and theme colors --- */
 body { 
-  background-color: #f8f9fa; 
-  color: #212529; 
+  background-color: var(--body-bg); 
+  color: var(--text-dark); 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* --- Custom backgrounds and borders --- */
-.bg-darktech { background-color: #ffffff !important; border-bottom: 1px solid #e9ecef; }
-.bg-darktech-2 { background-color: #ffffff !important; border: 1px solid #dee2e6; }
-.border-neon { border-color: #0066cc !important; }
+.bg-darktech { background-color: var(--white) !important; border-bottom: 1px solid #e9ecef; }
+.bg-darktech-2 { background-color: var(--white) !important; border: 1px solid var(--border-color); }
+.border-neon { border-color: var(--primary-color) !important; }
 .border-neon-subtle { border-color: rgba(0, 102, 204, 0.3) !important; }
 
 /* (Removed malformed early .btn-neon block that swallowed media queries) */
@@ -52,35 +67,35 @@ body {
 
 /* --- Buttons and links --- */
 .btn-neon { 
-  background-color: #0066cc; 
-  color: #ffffff; 
-  border-radius: 0.5rem; 
+  background-color: var(--primary-color); 
+  color: var(--white); 
+  border-radius: var(--radius-standard); 
   border: none;
   font-weight: 500;
 }
 .btn-neon:hover {
-  background-color: #0056b3;
-  color: #ffffff;
+  background-color: var(--primary-hover);
+  color: var(--white);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
+  box-shadow: 0 4px 8px var(--primary-border);
 }
 .btn-outline-neon { 
-  border-color: #0066cc; 
-  color: #0066cc; 
-  border-radius: 0.5rem; 
+  border-color: var(--primary-color); 
+  color: var(--primary-color); 
+  border-radius: var(--radius-standard); 
   background-color: transparent;
   font-weight: 500;
 }
 .btn-outline-neon:hover {
-  background-color: #0066cc;
-  color: #ffffff;
+  background-color: var(--primary-color);
+  color: var(--white);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 102, 204, 0.2);
 }
-.link-neon { color: #0066cc; text-decoration: none; }
+.link-neon { color: var(--primary-color); text-decoration: none; }
 .link-neon:hover { 
   text-decoration: underline; 
-  color: #0056b3;
+  color: var(--primary-hover);
 }
 
 /* Reusable gradient button for cart/search etc */
@@ -120,19 +135,26 @@ body {
 }
 .btn-gradient i { font-size: 1rem; }
 
+/* --- Utility classes for common values --- */
+.radius-standard { border-radius: var(--radius-standard) !important; }
+.radius-large { border-radius: var(--radius-large) !important; }
+.primary-color { color: var(--primary-color) !important; }
+.primary-bg { background-color: var(--primary-color) !important; }
+.text-muted-custom { color: var(--text-muted) !important; }
+
 /* --- Layout helpers --- */
 .section-py { padding-top: 4rem; padding-bottom: 4rem; }
 .card-tech { 
-  background-color: #ffffff; 
-  border: 1px solid #dee2e6; 
-  border-radius: 0.75rem; 
+  background-color: var(--white); 
+  border: 1px solid var(--border-color); 
+  border-radius: var(--radius-large); 
   transition: transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 .card-tech:hover { 
   transform: translateY(-4px); 
-  box-shadow: 0 8px 25px rgba(0, 102, 204, 0.15);
-  border-color: #0066cc;
+  box-shadow: 0 8px 25px var(--primary-light);
+  border-color: var(--primary-color);
 }
 .card-tech img { 
   height: 200px; 
@@ -163,9 +185,9 @@ body {
   border-radius: 0.75rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-.bg-neon { background: #0066cc !important; }
-.text-neon { color: #0066cc !important; }
-.badge.bg-neon { color: #ffffff !important; }
+.bg-neon { background: var(--primary-color) !important; }
+.text-neon { color: var(--primary-color) !important; }
+.badge.bg-neon { color: var(--white) !important; }
 .object-fit-cover { object-fit: cover; }
 .modal-content.bg-darktech-2 { 
   background-color: #ffffff !important; 
@@ -286,7 +308,7 @@ body.has-sidebar {
 }
 
 .navbar-brand-standard {
-  color: #0066cc !important;
+  color: var(--primary-color) !important;
   font-size: 1.5rem !important;
   text-decoration: none !important;
   font-weight: bold !important;
@@ -299,16 +321,16 @@ body.has-sidebar {
 }
 
 .nav-link-active {
-  color: #0066cc !important;
+  color: var(--primary-color) !important;
   font-weight: 600 !important;
-  border-bottom: 2px solid #0066cc !important;
+  border-bottom: 2px solid var(--primary-color) !important;
 }
 
 .search-input-standard {
   flex: 1 1 auto !important;
   max-width: none !important;
   border: 2px solid #e0e0e0 !important;
-  border-radius: 0.5rem !important;
+  border-radius: var(--radius-standard) !important;
 }
 
 /* --- Legacy navbar improvements --- */
@@ -319,17 +341,17 @@ body.has-sidebar {
   position: sticky;
 }
 .navbar-brand {
-  color: #0066cc !important;
+  color: var(--primary-color) !important;
   font-weight: 600;
   font-size: 1.5rem;
 }
 .navbar-nav .nav-link {
-  color: #6c757d !important;
+  color: var(--text-muted) !important;
   font-weight: 500;
 }
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-  color: #0066cc !important;
+  color: var(--primary-color) !important;
 }
 
 /* Tablet-specific navbar improvements */
@@ -442,50 +464,44 @@ body.has-sidebar {
 
 /* --- Improve text readability --- */
 h1, h2, h3, h4, h5, h6 {
-  color: #212529 !important;
+  color: var(--text-dark) !important;
   font-weight: 600;
 }
 
 .card-tech .card-title {
-  color: #212529 !important;
+  color: var(--text-dark) !important;
 }
 
 .card-tech .card-text {
-  color: #6c757d !important;
+  color: var(--text-muted) !important;
 }
 
 .text-muted {
-  color: #6c757d !important;
+  color: var(--text-muted) !important;
 }
 
 /* --- Form improvements --- */
-.form-control {
+.form-control, .form-select {
   border: 2px solid #e9ecef;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-standard);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.form-control:focus {
-  border-color: #0066cc;
-  box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+.form-control {
+  padding: 0.75rem 1rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem var(--primary-border);
 }
 .form-control.is-invalid {
   border-color: #dc3545;
 }
-.form-select {
-  border: 2px solid #e9ecef;
-  border-radius: 0.5rem;
-}
-.form-select:focus {
-  border-color: #0066cc;
-  box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
-}
 
 /* --- Filter button active state --- */
 .filter-btn.active {
-  background: #0066cc;
-  color: #ffffff !important;
-  border-color: #0066cc;
+  background: var(--primary-color);
+  color: var(--white) !important;
+  border-color: var(--primary-color);
 }
 
 /* --- Success/Alert colors --- */
@@ -914,106 +930,7 @@ section:nth-child(even) {
   display: block;
 }
 
-/* --- Standardized Light Theme Navigation --- */
-.navbar-light-theme {
-  background: linear-gradient(135deg, #ffffff, #f8f9fa);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 102, 204, 0.1);
-}
-
-.navbar-brand-styled {
-  color: #0066cc;
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.nav-link-styled {
-  color: #333333;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.nav-link-styled:hover {
-  color: #0066cc;
-}
-
-.nav-link-active {
-  color: #0066cc !important;
-  font-weight: 600;
-  border-bottom: 2px solid #0066cc;
-}
-
-.navbar-button-styled {
-  background: linear-gradient(135deg, #0066cc, #0080ff);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.navbar-button-styled:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 102, 204, 0.3);
-}
-
-.navbar-search-styled {
-  border: 2px solid #e0e0e0;
-  border-radius: 0.5rem;
-  transition: border-color 0.2s ease;
-}
-
-.navbar-search-styled:focus {
-  border-color: #0066cc;
-  box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
-}
-
-/* --- Standardized Light Theme Footer --- */
-.footer-light-theme {
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  color: #495057;
-  text-align: center;
-  border-top: 1px solid rgba(0, 102, 204, 0.08);
-  box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.03);
-  padding: 3rem 0;
-  margin-top: 5rem;
-}
-
-.footer-link-styled {
-  color: #0066cc;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.footer-link-styled:hover {
-  color: #0080ff;
-}
-
-/* --- Standardized Modal Styling --- */
-.modal-light-theme {
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.modal-header-light-theme {
-  background: linear-gradient(135deg, #f8f9fa, #ffffff);
-  border-bottom: 1px solid #e0e0e0;
-  border-radius: 1rem 1rem 0 0;
-}
-
-.modal-title-styled {
-  color: #333333;
-  font-weight: 600;
-}
-
-.modal-body-styled {
-  color: #333333;
-}
+/* Note: Redundant "Standardized Light Theme" section removed - functionality consolidated into "Standardized Navbar Classes" above */
 
 /* =====================================================
    TABLET-SPECIFIC IMPROVEMENTS (768px - 1199px)
