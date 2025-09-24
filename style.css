@@ -935,6 +935,77 @@ section:nth-child(even) {
   display: block;
 }
 
+/* Custom external carousel navigation buttons */
+.featured-carousel-wrapper {
+  --carousel-nav-size: 3rem;
+  --carousel-nav-bg: #ffffff;
+  --carousel-nav-color: var(--primary-color);
+  --carousel-nav-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  --carousel-nav-shadow-hover: 0 6px 18px rgba(0,0,0,0.22);
+  padding: 0 0.5rem; /* subtle breathing room */
+}
+
+.featured-carousel-wrapper .carousel-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--carousel-nav-size);
+  height: var(--carousel-nav-size);
+  border-radius: 50%;
+  background: var(--carousel-nav-bg);
+  color: var(--carousel-nav-color);
+  border: 1px solid rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  box-shadow: var(--carousel-nav-shadow);
+  transition: background .25s, color .25s, box-shadow .25s, transform .25s;
+  z-index: 5;
+}
+
+.featured-carousel-wrapper .carousel-nav-btn:hover,
+.featured-carousel-wrapper .carousel-nav-btn:focus-visible {
+  background: var(--primary-color);
+  color: #fff;
+  box-shadow: var(--carousel-nav-shadow-hover);
+  outline: none;
+}
+
+.featured-carousel-wrapper .carousel-nav-btn:active {
+  transform: translateY(-50%) scale(.92);
+}
+
+.featured-carousel-wrapper .carousel-nav-prev { left: -1.75rem; }
+.featured-carousel-wrapper .carousel-nav-next { right: -1.75rem; }
+
+/* Pull arrows slightly outside on large screens */
+@media (min-width: 992px) {
+  .featured-carousel-wrapper { padding: 0 2rem; }
+  .featured-carousel-wrapper .carousel-nav-prev { left: -2.25rem; }
+  .featured-carousel-wrapper .carousel-nav-next { right: -2.25rem; }
+}
+
+/* Adjust for tablets: bring them in a bit */
+@media (max-width: 991.98px) {
+  .featured-carousel-wrapper .carousel-nav-prev { left: 0.25rem; }
+  .featured-carousel-wrapper .carousel-nav-next { right: 0.25rem; }
+}
+
+/* Phones: shrink buttons so they don't overwhelm cards */
+@media (max-width: 576px) {
+  .featured-carousel-wrapper { --carousel-nav-size: 2.5rem; }
+  .featured-carousel-wrapper .carousel-nav-btn { font-size: 1rem; }
+  .featured-carousel-wrapper .carousel-nav-prev { left: 0.15rem; }
+  .featured-carousel-wrapper .carousel-nav-next { right: 0.15rem; }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .featured-carousel-wrapper .carousel-nav-btn { transition: none; }
+}
+
 /* Note: Redundant "Standardized Light Theme" section removed - functionality consolidated into "Standardized Navbar Classes" above */
 
 /* =====================================================

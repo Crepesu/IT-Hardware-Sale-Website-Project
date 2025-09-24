@@ -145,18 +145,16 @@
         </div>
         
         <!-- Carousel for Featured Products -->
-        <div class="position-relative">
-          <!-- External carousel controls -->
-          <button class="carousel-control-external carousel-control-external-prev" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+        <div class="featured-carousel-wrapper position-relative">
+          <!-- External carousel controls (custom styled) -->
+          <button class="carousel-nav-btn carousel-nav-prev" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="prev" aria-label="Previous slide">
+            <i class="bi bi-chevron-left"></i>
           </button>
-          <button class="carousel-control-external carousel-control-external-next" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+          <button class="carousel-nav-btn carousel-nav-next" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="next" aria-label="Next slide">
+            <i class="bi bi-chevron-right"></i>
           </button>
-          
-          <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+
+          <div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel" aria-label="Featured products carousel">
             <div class="carousel-inner" id="featured-products-carousel">
               <!-- Products will be loaded here -->
             </div>
