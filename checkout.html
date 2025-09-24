@@ -124,19 +124,19 @@
       opacity: 0.8;
     }
     
-    /* Enhanced cart summary with light theme */
+    /* Enhanced cart summary with high contrast theme */
     .cart-summary {
-      background: linear-gradient(145deg, #fafbfc, #ffffff);
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
       padding: 2.5rem;
       border-radius: 1.2rem;
-      color: #333;
+      color: #1a1a1a;
       height: fit-content;
       position: sticky;
       top: 2rem;
-      border: 1px solid rgba(0, 102, 204, 0.08);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04), 
-                  0 3px 10px rgba(0, 0, 0, 0.02),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      border: 2px solid rgba(0, 102, 204, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1), 
+                  0 3px 10px rgba(0, 0, 0, 0.05),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.9);
       transition: all 0.3s ease;
     }
     
@@ -150,13 +150,13 @@
       color: #0066cc !important;
       font-weight: 700;
       margin-bottom: 1.8rem;
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       text-shadow: none;
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid rgba(0, 102, 204, 0.1);
+      padding-bottom: 0.8rem;
+      border-bottom: 3px solid rgba(0, 102, 204, 0.2);
     }
     
     .cart-summary h5 i {
@@ -166,19 +166,21 @@
     }
     
     .cart-summary h6 {
-      color: #2c3e50 !important;
-      font-weight: 600;
-      font-size: 0.95rem;
+      color: #1a1a1a !important;
+      font-weight: 700;
+      font-size: 1rem;
     }
     
     .cart-summary .text-muted {
-      color: #6c757d !important;
+      color: #495057 !important;
       font-size: 0.9rem;
+      font-weight: 500;
     }
     
     .cart-summary strong {
-      color: #2c3e50 !important;
-      font-weight: 600;
+      color: #1a1a1a !important;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
     
     /* Enhanced cart items with light theme */
@@ -213,8 +215,15 @@
     }
     
     .cart-item .text-muted {
-      color: #6c757d !important;
+      color: #495057 !important;
       font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    /* Global text-muted override for better contrast */
+    .text-muted {
+      color: #495057 !important;
+      font-weight: 500;
     }
     
     .cart-item strong {
@@ -271,42 +280,46 @@
       }
     }
     
-    /* Enhanced order summary with light theme */
+    /* Enhanced order summary with high contrast theme */
     .order-summary {
-      background: linear-gradient(145deg, #f8f9fa, #ffffff);
-      padding: 1.8rem;
-      border-radius: 0.8rem;
+      background: linear-gradient(145deg, #ffffff, #f5f5f5);
+      padding: 2rem;
+      border-radius: 10px;
       margin-top: 1.8rem;
-      color: #2c3e50;
-      border: 1px solid rgba(0, 102, 204, 0.08);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      color: #1a1a1a;
+      border: 2px solid rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     }
     
     .order-summary span {
-      color: #2c3e50 !important;
-      font-weight: 500;
+      color: #1a1a1a !important;
+      font-weight: 600;
     }
     
     .order-summary strong {
-      color: #2c3e50 !important;
-      font-weight: 600;
+      color: #1a1a1a !important;
+      font-weight: 700;
+      font-size: 1.05rem;
     }
     
     .order-summary .text-success {
-      color: #28a745 !important;
-      font-weight: 600;
+      color: #198754 !important;
+      font-weight: 700;
+      font-size: 1.05rem;
     }
     
     .order-summary hr {
-      border-color: rgba(0, 102, 204, 0.15) !important;
+      border-color: rgba(0, 0, 0, 0.25) !important;
+      border-width: 2px !important;
       margin: 1.2rem 0;
-      opacity: 0.8;
+      opacity: 1;
     }
     
     .order-summary .text-neon {
-      font-size: 1.1rem;
-      color: #0066cc !important;
-      font-weight: 700;
+      font-size: 1.2rem;
+      color: #0056b3 !important;
+      font-weight: 800;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
     
     /* Enhanced payment button */
@@ -1433,11 +1446,18 @@
         shippingCost: Number
       },
       setup(props) {
+        const cartSubtotal = computed(() => {
+          return props.cartItems.reduce((total, item) => {
+            return total + (item.price * item.quantity);
+          }, 0);
+        });
+
         const finalTotal = computed(() => {
-          return props.cartTotal + props.shippingCost;
+          return cartSubtotal.value + props.shippingCost;
         });
 
         return {
+          cartSubtotal,
           finalTotal
         };
       },
@@ -1454,7 +1474,7 @@
           
           <!-- Cart Items -->
           <div v-else>
-            <div v-for="item in cartItems" :key="item.id" class="cart-item">
+            <div v-for="(item, index) in cartItems" :key="item.name || index" class="cart-item">
               <div class="flex-grow-1">
                 <h6 class="mb-1">{{ item.name }}</h6>
                 <small class="text-muted">Qty: {{ item.quantity }}</small>
@@ -1468,7 +1488,7 @@
             <div class="order-summary">
               <div class="d-flex justify-content-between mb-2">
                 <span>Subtotal:</span>
-                <span>\${{ cartTotal.toFixed(2) }}</span>
+                <span>\${{ cartSubtotal.toFixed(2) }}</span>
               </div>
               <div class="d-flex justify-content-between mb-2">
                 <span>Shipping:</span>
@@ -1582,6 +1602,7 @@
               <div class="col-lg-4">
                 <CartSummary 
                   :cart-items="cartItems"
+                  :cart-total="cartTotal"
                   :shipping-cost="shippingCost"
                 />
               </div>

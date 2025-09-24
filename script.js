@@ -559,6 +559,9 @@ function setupContactForm() {
 // ======================
 function setupCheckout() {
   if (!window.location.pathname.endsWith('checkout.html')) return;
+  
+  // Check if the page is using Vue components (has #app element)
+  if (document.getElementById('app')) return;
 
   loadCartFromStorage();
   renderCheckoutCart();
