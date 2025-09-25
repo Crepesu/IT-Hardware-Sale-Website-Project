@@ -1,6 +1,16 @@
-TechOps Project — Change Log
+# TechOps Project — Change Log
 
-Date: 2025-09-24
+<!-- 
+  Change Log Documentation Guidelines:
+  - Use reverse chronological order (newest first)
+  - Include date, version, and comprehensive change description
+  - Categorize changes by type: Features, Bug Fixes, UI/UX, Technical, Breaking Changes
+  - List affected files for developer reference
+  - Include accessibility and performance impact notes
+  - Reference issue numbers or PR links when applicable
+-->
+
+## 📅 Date: 2025-09-24
 
 ## Latest Update: UI Consistency, Accessibility Tweaks, Map Fix & Carousel Redesign
 
@@ -37,7 +47,7 @@ Date: 2025-09-24
 
 ---
 
-Date: 2025-09-23
+## 📅 Date: 2025-09-23
 
 ## Latest Update: Checkout Page Complete Redesign & Mobile Optimization
 

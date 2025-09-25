@@ -1,6 +1,12 @@
 # TechOps — IT Hardware Sale Website
 
+<!-- Project Overview -->
 A responsive, static demo storefront for selling computers, laptops, components and accessories. Built with plain HTML/CSS/JS and Bootstrap — intended as a demo project.
+
+<!-- Project Status & Version -->
+![Version](https://img.shields.io/badge/version-1.0-blue.svg)
+![Status](https://img.shields.io/badge/status-active-brightgreen.svg)
+![License](https://img.shields.io/badge/license-educational-yellow.svg)
 
 This repository contains the TechOps front-end:
 - Index (home) with a featured deal and sidebar navigation
@@ -11,7 +17,7 @@ This repository contains the TechOps front-end:
 
 ---
 
-## Features
+## 🚀 Features
 
 - Responsive layout with a fixed left sidebar and top navbar
 - Always-visible cart and search controls on index/products pages
@@ -36,7 +42,7 @@ This repository contains the TechOps front-end:
 
 ---
 
-## Demo / Preview
+## 💻 Demo / Preview
 
 Open `index.html` in your browser. For best experience serve the folder over a local HTTP server rather than opening files directly (to avoid fetch CORS issues when loading JSON).
 
@@ -52,7 +58,7 @@ Recommended quick ways to serve locally:
 
 ---
 
-## Getting started (local)
+## 🛠️ Getting Started (Local Development)
 
 1. Clone the repo
    - `git clone https://github.com/Crepesu/IT-Hardware-Sale-Website-Project.git`
@@ -63,7 +69,7 @@ Recommended quick ways to serve locally:
 
 ---
 
-## File structure (key files & purpose)
+## 📁 File Structure (Key Files & Purpose)
 
 Top-level (simplified):
 

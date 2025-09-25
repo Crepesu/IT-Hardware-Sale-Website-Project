@@ -1,6 +1,17 @@
 # TechOps Data Structure Documentation
 
-## products-data.json
+<!-- 
+  Data Structure Documentation
+  
+  This document provides comprehensive documentation for all data structures
+  used in the TechOps project, including JSON schemas, field descriptions,
+  validation rules, and usage examples.
+  
+  Last Updated: September 2025
+  Maintainer: SIT120 Project Team
+-->
+
+## 📊 products-data.json
 
 This file contains the product catalog data used throughout the TechOps website. The data is structured as a JSON array containing product objects.
 

@@ -105,7 +105,11 @@ body {
   }
 }
 
-/* --- Buttons and links --- */
+/* ============================================ */
+/* BUTTON COMPONENTS                           */
+/* ============================================ */
+
+/* Neon-style primary buttons with hover effects */
 .btn-neon { 
   background-color: var(--primary-color); 
   color: var(--white); 
@@ -175,14 +179,22 @@ body {
 }
 .btn-gradient i { font-size: 1rem; }
 
-/* --- Utility classes for common values --- */
+/* ============================================ */
+/* UTILITY CLASSES                             */
+/* ============================================ */
+
+/* Border radius utilities using design tokens */
 .radius-standard { border-radius: var(--radius-standard) !important; }
 .radius-large { border-radius: var(--radius-large) !important; }
 .primary-color { color: var(--primary-color) !important; }
 .primary-bg { background-color: var(--primary-color) !important; }
 .text-muted-custom { color: var(--text-muted) !important; }
 
-/* --- Layout helpers --- */
+/* ============================================ */
+/* LAYOUT COMPONENTS                           */
+/* ============================================ */
+
+/* Standard section padding */
 .section-py { padding-top: 4rem; padding-bottom: 4rem; }
 .card-tech { 
   background-color: var(--white); 
