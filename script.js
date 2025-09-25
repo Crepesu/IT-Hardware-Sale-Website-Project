@@ -1,34 +1,93 @@
+/*
+ * TechOps E-commerce Site - Main JavaScript Module
+ * =====================================================
+ * 
+ * This file handles all core functionality for the TechOps website including:
+ * - Shopping cart management with localStorage persistence
+ * - Product rendering and filtering
+ * - Search functionality across pages
+ * - UI interactions and form handling
+ * - Navigation and accessibility features
+ * 
+ * Dependencies:
+ * - Bootstrap 5.3.3 (modals, components)
+ * - Bootstrap Icons
+ * - products-data.json (product data source)
+ * 
+ * Browser Support: Modern browsers (ES6+)
+ * Last Updated: September 2025
+ */
+
 // ======================
 // GLOBAL VARIABLES
 // ======================
+
+/**
+ * Main shopping cart array - stores all cart items
+ * Each item: { name: string, price: number, quantity: number, originalPrice?: number, isDiscounted?: boolean }
+ * @type {Array<Object>}
+ */
 let cart = [];
 
 // ======================
-// CART MANAGEMENT
+// CART MANAGEMENT FUNCTIONS
 // ======================
+
+/**
+ * Loads cart data from browser's localStorage
+ * Called on page initialization to restore previous cart state
+ * Gracefully handles missing or corrupted cart data
+ */
 function loadCartFromStorage() {
-  cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  try {
+    cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  } catch (error) {
+    console.warn('Failed to load cart from storage:', error);
+    cart = []; // Reset to empty cart if data is corrupted
+  }
 }
 
+/**
+ * Saves current cart state to localStorage
+ * Called after any cart modification (add, remove, update quantity)
+ * Ensures cart persistence across browser sessions
+ */
 function saveCartToStorage() {
-  localStorage.setItem('cart', JSON.stringify(cart));
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch (error) {
+    console.error('Failed to save cart to storage:', error);
+  }
 }
 
+/**
+ * Adds a product to the shopping cart
+ * Handles both regular and discounted prices, prevents duplicate rapid clicks
+ * Updates localStorage and provides visual feedback to user
+ * 
+ * @param {string} productName - Name of the product to add (must match products-data.json)
+ */
 function addToCart(productName) {
-  // Prevent multiple rapid clicks
+  // Prevent multiple rapid clicks by checking button disabled state
   const btn = document.querySelector(`[data-name="${productName}"]`);
   if (btn && btn.disabled) return;
   
-  // Temporarily disable the button
+  // Temporarily disable the button to prevent double-clicking
   if (btn) btn.disabled = true;
   
-  // Check for discounted price
+  // Check for discounted price from button's data-price attribute
+  // Featured deals may have different prices than the base product data
   const discountedBtn = document.querySelector(`[data-name="${productName}"][data-price]`);
   const discountedPrice = discountedBtn ? parseFloat(discountedBtn.getAttribute('data-price')) : null;
 
+  // Fetch product data from JSON file
   fetch('products-data.json')
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to load product data');
+      return res.json();
+    })
     .then(products => {
+      // Find the requested product in the data
       const product = products.find(p => p.name === productName);
       if (!product) {
         alert('Product not found!');
@@ -36,12 +95,17 @@ function addToCart(productName) {
         return;
       }
 
+      // Use discounted price if available, otherwise use regular price
       const finalPrice = discountedPrice || product.price;
+      
+      // Check if product already exists in cart
       const existingItem = cart.find(item => item.name === productName);
       
       if (existingItem) {
+        // Increment quantity for existing item
         existingItem.quantity += 1;
       } else {
+        // Add new item to cart with all necessary properties
         cart.push({
           name: productName,
           price: finalPrice,
@@ -51,53 +115,78 @@ function addToCart(productName) {
         });
       }
       
+      // Save updated cart to localStorage
       saveCartToStorage();
+      
+      // Show visual feedback to user (button animation)
       showAddToCartFeedback(productName, !!discountedBtn);
       
-      // Re-enable button after feedback
+      // Re-enable button after feedback animation completes
       setTimeout(() => {
         if (btn) btn.disabled = false;
       }, 1600);
     })
     .catch(err => {
+      // Handle any errors (network issues, JSON parsing, etc.)
       console.error('Error adding to cart:', err);
+      alert('Failed to add product to cart. Please try again.');
       if (btn) btn.disabled = false;
     });
 }
 
+/**
+ * Provides visual feedback when a product is added to cart
+ * Temporarily changes button text and color to confirm the action
+ * 
+ * @param {string} productName - Name of the product that was added
+ * @param {boolean} isDiscounted - Whether this was a discounted item (affects button styling)
+ */
 function showAddToCartFeedback(productName, isDiscounted) {
   const btn = document.querySelector(`[data-name="${productName}"]`);
   if (!btn) return;
   
+  // Store original button state for restoration
   const originalText = btn.textContent;
   const originalClass = isDiscounted ? 'btn-primary' : 'btn-neon';
   
+  // Change to success state
   btn.textContent = 'Added!';
   btn.className = 'btn btn-success';
   
+  // Restore original state after 1.5 seconds
   setTimeout(() => {
     btn.textContent = originalText;
     btn.className = `btn ${originalClass}`;
   }, 1500);
 }
 
+/**
+ * Displays the shopping cart modal with all items, pricing, and controls
+ * Calculates totals, shows savings for discounted items, and provides cart management buttons
+ * Updates the modal content dynamically and handles empty cart state
+ */
 function showCart() {
+  // Initialize Bootstrap modal component
   const modal = new bootstrap.Modal(document.getElementById('cartModal'));
   const body = document.getElementById('cart-modal-body');
   
+  // Handle empty cart case
   if (cart.length === 0) {
     body.innerHTML = '<p>Your cart is empty.</p>';
     modal.show();
     return;
   }
 
+  // Initialize running totals for cart summary
   let total = 0;
   let totalSavings = 0;
   
+  // Generate HTML for each cart item with pricing and controls
   const cartHTML = cart.map(item => {
     const itemTotal = item.price * item.quantity;
     total += itemTotal;
     
+    // Calculate and display savings for discounted items
     let savingsDisplay = '';
     if (item.isDiscounted && item.originalPrice) {
       const savings = (item.originalPrice - item.price) * item.quantity;
@@ -112,6 +201,9 @@ function showCart() {
       `;
     }
     
+    // Return HTML structure for individual cart item
+    // Includes product info, quantity controls, and remove button
+    // Note: Escapes single quotes in product names to prevent JS injection
     return `
       <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
         <div class="flex-grow-1">
@@ -135,6 +227,7 @@ function showCart() {
     `;
   }).join('');
   
+  // Show total savings section only if there are actual savings
   const totalSavingsDisplay = totalSavings > 0 ? `
     <div class="d-flex justify-content-between mb-2 text-success">
       <span>Total Savings:</span>
@@ -142,6 +235,7 @@ function showCart() {
     </div>
   ` : '';
   
+  // Assemble complete modal content with items, totals, and action buttons
   body.innerHTML = `
     ${cartHTML}
     <hr>
@@ -156,21 +250,39 @@ function showCart() {
     </div>
   `;
   
+  // Display the populated modal
   modal.show();
 }
 
+/**
+ * Clears all items from the shopping cart
+ * Updates localStorage and refreshes the cart modal display
+ */
 function clearCart() {
   cart = [];
   saveCartToStorage();
-  showCart();
+  showCart(); // Refresh modal to show empty state
 }
 
+/**
+ * Removes a specific product from the shopping cart
+ * Updates localStorage and refreshes the cart modal display
+ * 
+ * @param {string} productName - Name of the product to remove
+ */
 function removeFromCart(productName) {
   cart = cart.filter(item => item.name !== productName);
   saveCartToStorage();
-  showCart();
+  showCart(); // Refresh modal to show updated cart
 }
 
+/**
+ * Updates the quantity of a specific product in the cart
+ * If new quantity is 0 or less, removes the item from cart
+ * 
+ * @param {string} productName - Name of the product to update
+ * @param {number} newQuantity - New quantity to set (must be positive integer)
+ */
 function updateCartQuantity(productName, newQuantity) {
   if (newQuantity <= 0) {
     removeFromCart(productName);
@@ -181,38 +293,72 @@ function updateCartQuantity(productName, newQuantity) {
   if (item) {
     item.quantity = newQuantity;
     saveCartToStorage();
-    showCart();
+    showCart(); // Refresh cart modal to reflect changes
   }
 }
 
+/**
+ * Increases the quantity of a specific product in the cart by 1
+ * Used by the '+' button in cart item controls
+ * 
+ * @param {string} productName - Name of the product to increase quantity for
+ */
 function increaseQuantity(productName) {
   const item = cart.find(item => item.name === productName);
   if (item) {
     item.quantity += 1;
     saveCartToStorage();
-    showCart();
+    showCart(); // Refresh cart modal to show updated quantity
   }
 }
 
+/**
+ * Decreases the quantity of a specific product in the cart by 1
+ * If quantity reaches 1 and is decreased, removes the item entirely
+ * Used by the '-' button in cart item controls
+ * 
+ * @param {string} productName - Name of the product to decrease quantity for
+ */
 function decreaseQuantity(productName) {
   const item = cart.find(item => item.name === productName);
   if (item && item.quantity > 1) {
     item.quantity -= 1;
     saveCartToStorage();
-    showCart();
+    showCart(); // Refresh cart modal to show updated quantity
   } else if (item && item.quantity === 1) {
-    removeFromCart(productName);
+    removeFromCart(productName); // Remove item if quantity would become 0
   }
 }
 
+/**
+ * Navigates to the checkout page
+ * Ensures cart data is persisted before navigation
+ * Called when user clicks "Proceed to Checkout" button
+ */
 function goToCheckout() {
-  saveCartToStorage();
+  saveCartToStorage(); // Ensure cart is saved before leaving page
   window.location.href = 'checkout.html';
 }
 
 // ======================
 // PRODUCT RENDERING
 // ======================
+
+/**
+ * Generates HTML for a single product card with dynamic pricing and discount logic
+ * Applies 20% discount to the first product (featured item) automatically
+ * Handles price display, discount badges, and fallback images
+ * 
+ * @param {Object} prod - Product object from products-data.json
+ * @param {string} prod.name - Product name
+ * @param {number} prod.price - Original product price
+ * @param {string} prod.image - Product image path
+ * @param {string} prod.description - Product description
+ * @param {string} prod.category - Product category
+ * @param {number} [prod.discountPercent] - Optional discount percentage
+ * @param {number} [index=0] - Product position (0 = featured with auto-discount)
+ * @returns {string} Complete HTML string for product card
+ */
 function renderProductCard(prod, index=0) {
   // Determine if product should display a discount (mirror featured logic: apply 20% off first product)
   const discountPercent = (prod.discountPercent || (index === 0 ? 20 : 0));
@@ -249,30 +395,47 @@ function renderProductCard(prod, index=0) {
     </div>`;
 }
 
+/**
+ * Renders all products or a limited subset to a specified container
+ * Fetches product data from JSON file and generates HTML cards
+ * 
+ * @param {string} containerId - ID of the HTML element to render products into
+ * @param {number|null} [limit=null] - Maximum number of products to render (null = all)
+ */
 function renderProducts(containerId, limit = null) {
   fetch('products-data.json')
     .then(res => res.json())
     .then(data => {
-      let products = data.filter(p => p.name); // Only valid products
-      if (limit) products = products.slice(0, limit);
+      let products = data.filter(p => p.name); // Only valid products with names
+      if (limit) products = products.slice(0, limit); // Apply limit if specified
       const container = document.getElementById(containerId);
       if (container) {
+        // Generate HTML cards using renderProductCard with index for discount logic
         container.innerHTML = products.map((p,i)=>renderProductCard(p,i)).join('');
       }
     })
     .catch(err => console.error('Error loading products:', err));
 }
 
+/**
+ * Filters and displays products by category
+ * Used by category filter buttons on products page
+ * Shows all products when category is 'All', otherwise filters by exact category match
+ * 
+ * @param {string} category - Category to filter by ('All' for no filter, or specific category name)
+ */
 function filterProducts(category) {
   fetch('products-data.json')
     .then(res => res.json())
     .then(products => {
+      // Filter products based on category selection
       const filtered = category === 'All'
-        ? products.filter(p => p.name)
-        : products.filter(p => p.category === category && p.name);
+        ? products.filter(p => p.name) // Show all valid products
+        : products.filter(p => p.category === category && p.name); // Filter by category
       
       const container = document.getElementById('products');
       if (container) {
+        // Render filtered products or show "no products" message
         container.innerHTML = filtered.length
             ? filtered.map((p, i) => renderProductCard(p, i)).join('')
           : '<div class="col-12"><div class="alert alert-warning">No products found.</div></div>';
@@ -283,6 +446,18 @@ function filterProducts(category) {
 // ======================
 // FEATURED PRODUCTS
 // ======================
+
+/**
+ * Renders the featured deal product with fixed 20% discount
+ * Used in hero section to highlight a special offer
+ * Displays original price, discounted price, and savings amount
+ * 
+ * @param {Object} product - Product object to feature
+ * @param {string} product.name - Product name
+ * @param {number} product.price - Original product price
+ * @param {string} product.image - Product image path
+ * @param {string} product.description - Product description
+ */
 function renderFeaturedDeal(product) {
   const container = document.getElementById('featured-deal');
   if (!container) return;
@@ -312,6 +487,14 @@ function renderFeaturedDeal(product) {
   `;
 }
 
+/**
+ * Renders responsive product carousel with dynamic slide organization
+ * Adapts products per slide based on screen size and applies discount to first product
+ * Used on homepage to showcase featured products in an interactive carousel
+ * 
+ * @param {string} containerId - Container ID (currently unused, could be for future flexibility)
+ * @param {number} [limit=8] - Maximum number of products to include in carousel
+ */
 function renderFeaturedProductsCarousel(containerId, limit = 8) {
   fetch('products-data.json')
     .then(res => res.json())
@@ -432,7 +615,15 @@ function renderFeaturedProductsCarousel(containerId, limit = 8) {
 // SEARCH FUNCTIONALITY
 // ======================
 
-// Enhanced search function that searches across multiple fields
+/**
+ * Enhanced search function that searches across multiple product fields
+ * Performs case-insensitive partial matching on name, description, and category
+ * Returns all products if search term is empty
+ * 
+ * @param {Array} products - Array of product objects to search through
+ * @param {string} searchTerm - Search query string (case-insensitive)
+ * @returns {Array} Filtered array of products matching the search term
+ */
 function searchProducts(products, searchTerm) {
   const term = searchTerm.toLowerCase().trim();
   if (!term) return products;
@@ -452,6 +643,11 @@ function searchProducts(products, searchTerm) {
   });
 }
 
+/**
+ * Sets up search form event handlers for all pages
+ * Handles form submission and redirects to products page with search parameters
+ * Supports search forms on homepage, products page, and contact page
+ */
 function setupSearch() {
   const searchForm = document.getElementById('searchForm');
   const searchFormProducts = document.getElementById('searchFormProducts');
@@ -499,6 +695,12 @@ function setupSearch() {
 // ======================
 // SIDEBAR NAVIGATION
 // ======================
+
+/**
+ * Sets up sidebar navigation highlighting based on scroll position and clicks
+ * Uses Intersection Observer API to detect which section is currently visible
+ * Highlights the corresponding navigation link in the sidebar
+ */
 function setupSidebarHighlight() {
   const sidebarLinks = Array.from(document.querySelectorAll('.sidebar-link[href^="#"]'));
   if (sidebarLinks.length === 0) return;
@@ -541,6 +743,12 @@ function setupSidebarHighlight() {
 // ======================
 // FORM VALIDATION
 // ======================
+
+/**
+ * Sets up contact form validation with real-time feedback
+ * Implements comprehensive validation rules for name, email, phone, and message fields
+ * Provides instant feedback as user types and prevents invalid form submission
+ */
 function setupContactForm() {
   const contactForm = document.getElementById('contactForm');
   if (!contactForm) return;
@@ -673,6 +881,12 @@ function setupContactForm() {
 // ======================
 // CHECKOUT FUNCTIONALITY  
 // ======================
+
+/**
+ * Sets up checkout page functionality when not using Vue.js components
+ * Handles cart rendering, form validation, shipping calculations, and order processing
+ * Falls back to vanilla JS implementation if Vue component system is not detected
+ */
 function setupCheckout() {
   if (!window.location.pathname.endsWith('checkout.html')) return;
   
@@ -800,6 +1014,11 @@ function setupCheckout() {
   });
 }
 
+/**
+ * Renders the shopping cart table on checkout page
+ * Displays cart items with quantity controls, pricing details, and removal buttons
+ * Shows savings information for discounted items
+ */
 function renderCheckoutCart() {
   const container = document.getElementById('cart-items');
   if (!container) return;
@@ -872,6 +1091,11 @@ function renderCheckoutCart() {
   });
 }
 
+/**
+ * Calculates and displays checkout totals including shipping and savings
+ * Updates in real-time when cart contents or shipping method changes
+ * Shows breakdown of original prices, discounts, subtotal, shipping, and final total
+ */
 function updateCheckoutTotal() {
   loadCartFromStorage();
   
@@ -939,6 +1163,11 @@ function updateCheckoutTotal() {
 // ======================
 // CART MODAL FOCUS MANAGEMENT
 // ======================
+
+/**
+ * Sets up cart modal event handlers for better UX
+ * Removes focus from cart buttons when modal closes to prevent visual artifacts
+ */
 function setupCartModalEvents() {
   const cartModal = document.getElementById('cartModal');
   if (cartModal) {
@@ -958,6 +1187,12 @@ function setupCartModalEvents() {
 // ======================
 // INITIALIZATION
 // ======================
+
+/**
+ * Main initialization function called when DOM is loaded
+ * Sets up all page functionality, event listeners, and loads initial data
+ * Handles different page types (homepage, products, checkout) appropriately
+ */
 function initializePage() {
   loadCartFromStorage();
   
@@ -1038,6 +1273,12 @@ function initializePage() {
 // ======================
 // EVENT LISTENERS
 // ======================
+
+/**
+ * Global click event delegation for add-to-cart buttons
+ * Handles all "Add to Cart" button clicks across the entire site
+ * Uses event delegation for dynamic content compatibility
+ */
 document.addEventListener('click', function(e) {
   if (e.target.classList.contains('add-to-cart-btn')) {
     e.preventDefault();
@@ -1049,4 +1290,8 @@ document.addEventListener('click', function(e) {
   }
 });
 
+/**
+ * Start the application when DOM is fully loaded
+ * Ensures all HTML elements are available before initializing functionality
+ */
 document.addEventListener('DOMContentLoaded', initializePage);

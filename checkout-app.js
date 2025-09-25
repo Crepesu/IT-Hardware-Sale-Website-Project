@@ -1,9 +1,52 @@
-// Checkout Page Vue.js Application
-// External Vue components for checkout.html
+/**
+ * Checkout Page Vue.js Application
+ * 
+ * Vue 3 Composition API implementation for the e-commerce checkout system
+ * Uses template literals instead of .vue files for educational simplicity
+ * 
+ * Components:
+ * - CheckoutForm: Complete checkout form with validation
+ * - Main App: Shopping cart management and order processing
+ * 
+ * Features:
+ * - Shopping cart display with quantity management
+ * - Real-time form validation for shipping and payment details
+ * - Dynamic shipping cost calculation
+ * - Credit card input formatting and validation
+ * - Order processing simulation with success feedback
+ * - localStorage integration for cart persistence
+ * 
+ * Dependencies: Vue 3 (loaded via CDN)
+ * Target Element: #app (checkout.html)
+ * 
+ * @version 1.0
+ * @author IT Hardware Sale Website Project
+ */
 
 const { createApp, ref, reactive, computed, onMounted } = Vue;
 
-// Child Component: CheckoutForm
+/**
+ * CheckoutForm Component
+ * 
+ * Comprehensive checkout form handling shipping, billing, and payment information
+ * Includes real-time validation, input formatting, and order processing
+ * 
+ * Props:
+ * - cartItems: Array of cart items to display
+ * - cartTotal: Total cost of items in cart
+ * - shippingCost: Current shipping cost based on selected method
+ * 
+ * Emits:
+ * - order-placed: Triggered when order is successfully placed
+ * - shipping-changed: Triggered when shipping method changes
+ * 
+ * Features:
+ * - Multi-section form (contact, shipping, payment)
+ * - Real-time validation with error feedback
+ * - Credit card number formatting and validation
+ * - Shipping method selection with cost calculation
+ * - Order processing simulation with loading states
+ */
 const CheckoutForm = {
   props: {
     cartItems: Array,

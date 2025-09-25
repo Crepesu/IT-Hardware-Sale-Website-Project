@@ -1,9 +1,48 @@
-// Contact Page Vue.js Application
-// External Vue components for contact.html
+/**
+ * Contact Page Vue.js Application
+ * 
+ * Vue 3 Composition API implementation for the contact form system
+ * Uses template literals instead of .vue files for educational simplicity
+ * 
+ * Components:
+ * - ContactForm: Reusable form component with validation
+ * - Main App: Form management and success state handling
+ * 
+ * Features:
+ * - Real-time form validation with error feedback
+ * - Dynamic country selection and contact preferences
+ * - Reactive data binding with v-model
+ * - Component communication via props and emits
+ * - Form reset and success message display
+ * 
+ * Dependencies: Vue 3 (loaded via CDN)
+ * Target Element: #app (contact.html)
+ * 
+ * @version 1.0
+ * @author IT Hardware Sale Website Project
+ */
 
 const { createApp, ref, reactive } = Vue;
 
-// Child Component: ContactForm
+/**
+ * ContactForm Component
+ * 
+ * Reusable contact form component with comprehensive validation
+ * Handles user input, validation, and form submission
+ * 
+ * Props:
+ * - initialData: Object with pre-filled form values
+ * 
+ * Emits:
+ * - form-submitted: Triggered when form is successfully validated and submitted
+ * 
+ * Features:
+ * - Reactive form data with two-way binding
+ * - Real-time validation with error messages  
+ * - Dynamic dropdown options for countries and contact preferences
+ * - Age validation and contact preference selection
+ * - Newsletter subscription checkbox
+ */
 const ContactForm = {
   props: {
     initialData: {
@@ -55,7 +94,13 @@ const ContactForm = {
     const showFormData = ref(false);
     const submittedData = ref(null);
 
-    // Validation functions
+    /**
+     * Validation Functions
+     * Each function validates a specific form field and updates error state
+     * @returns {boolean} True if validation passes, false otherwise
+     */
+    
+    /** Validates name field - required, minimum 2 characters */
     const validateName = () => {
       if (!formData.name.trim()) {
         errors.name = 'Name is required';
@@ -69,6 +114,7 @@ const ContactForm = {
       return true;
     };
 
+    /** Validates email field - required, proper email format */
     const validateEmail = () => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!formData.email.trim()) {
@@ -83,6 +129,7 @@ const ContactForm = {
       return true;
     };
 
+    /** Validates phone field - required, 7-15 characters with valid phone characters */
     const validatePhone = () => {
       if (!formData.phone.trim()) {
         errors.phone = 'Phone number is required';
@@ -97,6 +144,7 @@ const ContactForm = {
       return true;
     };
 
+    /** Validates age field - required, positive number, realistic range (1-120) */
     const validateAge = () => {
       if (!formData.age || formData.age <= 0) {
         errors.age = 'Please enter a valid age (positive number)';
@@ -110,6 +158,7 @@ const ContactForm = {
       return true;
     };
 
+    /** Validates contact preference field - required selection */
     const validateContactPreference = () => {
       if (!formData.contactPreference) {
         errors.contactPreference = 'Please select a contact preference';
@@ -119,6 +168,7 @@ const ContactForm = {
       return true;
     };
 
+    /** Validates country field - required selection */
     const validateCountry = () => {
       if (!formData.country) {
         errors.country = 'Please select a country';
@@ -128,12 +178,14 @@ const ContactForm = {
       return true;
     };
 
+    /** Validates newsletter field - optional, always passes */
     const validateNewsletter = () => {
       // Newsletter is now optional - no validation required
       errors.newsletter = '';
       return true;
     };
 
+    /** Validates message field - required, minimum 10 characters */
     const validateMessage = () => {
       if (!formData.message.trim()) {
         errors.message = 'Message is required';
@@ -147,6 +199,7 @@ const ContactForm = {
       return true;
     };
 
+    /** Validates entire form by running all individual field validations */
     const validateForm = () => {
       const validations = [
         validateName(),
@@ -160,6 +213,7 @@ const ContactForm = {
       return validations.every(Boolean);
     };
 
+    /** Resets form to initial state, clears all errors and success messages */
     const resetForm = () => {
       Object.assign(formData, {
         name: props.initialData.name || '',
@@ -182,7 +236,7 @@ const ContactForm = {
       submittedData.value = null;
     };
 
-    // Hide success message when user starts typing again
+    /** Hides success message when user starts typing again for better UX */
     const onFieldChange = () => {
       if (showSuccess.value) {
         showSuccess.value = false;
@@ -190,6 +244,7 @@ const ContactForm = {
       }
     };
 
+    /** Handles form submission - validates, shows success message, and emits data to parent */
     const handleSubmit = () => {
       if (validateForm()) {
         // Create a copy of form data for submission
@@ -580,8 +635,13 @@ const ContactApp = {
   `
 };
 
-// Initialize the Vue application when DOM is ready
+/**
+ * Application Initialization
+ * 
+ * Mounts the Vue application to the #app element when DOM is ready
+ * Ensures all HTML elements are available before Vue takes control
+ */
 document.addEventListener('DOMContentLoaded', function() {
-  // Mount the Vue application
+  // Mount the Vue application to the #app element
   createApp(ContactApp).mount('#app');
 });
