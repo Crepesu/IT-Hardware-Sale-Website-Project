@@ -1,7 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+  TechOps - IT Hardware Sale Website Homepage
+  
+  Educational project demonstrating modern web development practices
+  using HTML5, CSS3, JavaScript, Bootstrap 5, and Vue.js
+  
+  Features:
+  - Responsive design with mobile-first approach
+  - Interactive product carousel with custom navigation
+  - Shopping cart functionality with localStorage persistence
+  - Search functionality across product catalog  
+  - Dynamic product rendering from JSON data
+  - Accessibility features and semantic HTML structure
+  
+  Technologies:
+  - HTML5 with semantic elements
+  - Bootstrap 5.3.3 for responsive layout and components
+  - Custom CSS for branding and enhanced styling
+  - Vanilla JavaScript for core functionality
+  - Bootstrap Icons for consistent iconography
+  
+  @author SIT120 Project Team
+  @version 1.0
+-->
 <head>
-  <!-- Meta tags for responsive design and character encoding -->
+  <!-- Essential meta tags for responsive design and character encoding -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TechOps — Computers & Tech</title>
@@ -115,38 +139,59 @@
       </div>
     </div>
   </div>
+  <!-- ============================================ -->
+  <!-- MAIN CONTENT AREA                           -->
+  <!-- ============================================ -->
   <main id="main-content">
-    <!-- Hero -->
+    
+    <!-- ============================================ -->
+    <!-- HERO SECTION - Welcome message and CTA     -->
+    <!-- ============================================ -->
+    <!-- Primary landing section with brand message and featured deal -->
     <header id="home" class="hero section-py">
       <div class="container">
         <div class="row align-items-center g-4">
+          <!-- Hero text content - left side on desktop -->
           <div class="col-lg-6 text-center text-lg-start">
+            <!-- Main headline with TechOps branding -->
             <h1 class="display-4 fw-bold mb-3">Your One‑Stop Computer Store</h1>
+            <!-- Value proposition and target audience description -->
             <p class="lead text-muted mb-4">Laptops, desktops, and accessories — curated for gaming, study, and work.</p>
+            <!-- Call-to-action button linking to products section -->
             <div class="d-flex gap-3 justify-content-center justify-content-lg-start">
               <a href="#products" class="btn btn-neon btn-lg"><i class="bi bi-cpu"></i> Shop Products</a>
             </div>
+            <!-- Design inspiration credit and educational context -->
             <div class="mt-3 small text-secondary">Inspired by Newegg, B&amp;H &amp; JB Hi-Fi layouts for usability and product discoverability.</div>
           </div>
+          <!-- Featured deal showcase - right side on desktop -->
           <div class="col-lg-6">
-          <!-- Featured Deal will be rendered here -->
-          <div id="featured-deal" class="hero-card rounded-4 p-4"></div>
+            <!-- Dynamic featured deal card - populated by JavaScript -->
+            <div id="featured-deal" class="hero-card rounded-4 p-4"></div>
           </div>
         </div>
       </div>
       <div class="hero-glow"></div>
     </header>
-    <!-- Featured Products -->
+    <!-- ============================================ -->
+    <!-- FEATURED PRODUCTS SECTION                  -->
+    <!-- ============================================ -->
+    <!-- Interactive carousel showcasing selected products with special pricing -->
     <section id="products" class="py-5">
       <div class="container">
+        <!-- Section header with title and navigation link -->
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h2 class="text-neon">Featured Products</h2>
+          <!-- Link to full products catalog page -->
           <a href="products.html" class="btn btn-outline-neon">View All Products</a>
         </div>
         
-        <!-- Carousel for Featured Products -->
+        <!-- ============================================ -->
+        <!-- PRODUCT CAROUSEL WITH CUSTOM NAVIGATION    -->
+        <!-- ============================================ -->
+        <!-- Responsive carousel wrapper with external navigation controls -->
         <div class="featured-carousel-wrapper position-relative">
-          <!-- External carousel controls (custom styled) -->
+          <!-- Custom styled navigation buttons positioned outside carousel content -->
           <button class="carousel-nav-btn carousel-nav-prev" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="prev" aria-label="Previous slide">
             <i class="bi bi-chevron-left"></i>
           </button>

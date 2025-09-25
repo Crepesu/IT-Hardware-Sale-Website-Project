@@ -1,4 +1,36 @@
-/* --- CSS Variables for consistency --- */
+/**
+ * TechOps - IT Hardware Sale Website Styles
+ * 
+ * Custom CSS stylesheet for the TechOps e-commerce website
+ * Built on top of Bootstrap 5.3.3 with custom branding and enhancements
+ * 
+ * Features:
+ * - CSS custom properties for consistent theming
+ * - Responsive design with mobile-first approach
+ * - Custom neon-style branding and gradients
+ * - Interactive carousel with external navigation
+ * - Accessible color contrasts and focus states
+ * - Product card styling with discount badges
+ * - Sidebar navigation with glow effects
+ * - Form validation styling and feedback
+ * 
+ * Organization:
+ * 1. CSS Variables (Design tokens)
+ * 2. Base styles and typography
+ * 3. Component styles (buttons, cards, forms)
+ * 4. Layout styles (sidebar, navbar, grid)
+ * 5. Interactive elements (carousel, modals)
+ * 6. Responsive breakpoints
+ * 7. Utility classes
+ * 
+ * @author SIT120 Project Team
+ * @version 1.0
+ * @requires Bootstrap 5.3.3
+ */
+
+/* ============================================ */
+/* CSS VARIABLES (Design Tokens)               */
+/* ============================================ */
 :root {
   --primary-color: #0066cc;
   --primary-hover: #0056b3;
@@ -13,20 +45,28 @@
   --radius-large: 0.75rem;
 }
 
-/* --- Main body and theme colors --- */
+/* ============================================ */
+/* BASE STYLES AND TYPOGRAPHY                  */
+/* ============================================ */
 body { 
   background-color: var(--body-bg); 
   color: var(--text-dark); 
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* --- Custom backgrounds and borders --- */
+/* ============================================ */
+/* CUSTOM BACKGROUNDS AND BORDERS              */
+/* ============================================ */
 .bg-darktech { background-color: var(--white) !important; border-bottom: 1px solid #e9ecef; }
 .bg-darktech-2 { background-color: var(--white) !important; border: 1px solid var(--border-color); }
 .border-neon { border-color: var(--primary-color) !important; }
 .border-neon-subtle { border-color: rgba(0, 102, 204, 0.3) !important; }
 
 /* (Removed malformed early .btn-neon block that swallowed media queries) */
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS                      */
+/* ============================================ */
 
 /* Tablet-specific product grid (768px - 1199px) */
 @media (min-width: 768px) and (max-width: 1199.98px) {
